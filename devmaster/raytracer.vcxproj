@@ -15,12 +15,14 @@
     <ClInclude Include="source\raytracer.h" />
     <ClInclude Include="source\scene.h" />
     <ClInclude Include="source\surface.h" />
+    <ClInclude Include="source\twister.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\raytracer.cpp" />
     <ClCompile Include="source\scene.cpp" />
     <ClCompile Include="source\surface.cpp" />
     <ClCompile Include="source\testapp.cpp" />
+    <ClCompile Include="source\twister.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <SccProjectName />

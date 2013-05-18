@@ -18,11 +18,15 @@
     <ClInclude Include="source\surface.h">
       <Filter>headers</Filter>
     </ClInclude>
+    <ClInclude Include="source\twister.h">
+      <Filter>headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\raytracer.cpp" />
     <ClCompile Include="source\scene.cpp" />
     <ClCompile Include="source\surface.cpp" />
     <ClCompile Include="source\testapp.cpp" />
+    <ClCompile Include="source\twister.cpp" />
   </ItemGroup>
 </Project>

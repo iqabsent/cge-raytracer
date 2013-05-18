@@ -7,6 +7,7 @@
 #include "raytracer.h"
 #include "scene.h"
 #include "surface.h"
+#include "common.h"
 
 #define SCRWIDTH	800
 #define SCRHEIGHT	600
@@ -94,7 +95,7 @@ int APIENTRY WinMain(HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpCmdLine
 	while (1)
 	{
 		int fstart = GetTickCount();
-		tracer->InitRender();
+		tracer->InitRender( Raytracer::vector3( -2, 0, -2 ), Raytracer::vector3( 0, 0.8f, 5 ) );
 		// while (!tracer->RenderTiles()) DrawWindow();
 		while (!tracer->Render()) DrawWindow();
 		int ftime = GetTickCount() - fstart;
