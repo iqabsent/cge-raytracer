@@ -1,0 +1,7 @@
+/Debug
+/ipch
+*.sdf
+*.sln
+*.suo
+*.vcxproj.filters
+*.vcxproj.user
