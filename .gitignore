@@ -1,5 +1,7 @@
-/project/Debug
-/project/ipch
+/devmaster/Debug
+/devmaster/ipch
+/scratchpixel/Debug
+/scratchpixel/ipch
 *.sdf
 *.sln
 *.suo
