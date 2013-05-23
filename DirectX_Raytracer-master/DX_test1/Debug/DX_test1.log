@@ -1,0 +1,23 @@
+﻿Build started 23/05/2013 22:34:42.
+     1>Project "C:\Users\James\Dropbox\Maths and Graphics Content\DirectX_Raytracer-master\DirectX_Raytracer-master\DX_test1\DX_test1.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Debug\DX_Raytracer.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+         All outputs are up-to-date.
+       ResourceCompile:
+         All outputs are up-to-date.
+       ManifestResourceCompile:
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+       Manifest:
+         All outputs are up-to-date.
+       FinalizeBuildStatus:
+         Deleting file "Debug\DX_Raytracer.unsuccessfulbuild".
+         Touching "Debug\DX_Raytracer.lastbuildstate".
+     1>Done Building Project "C:\Users\James\Dropbox\Maths and Graphics Content\DirectX_Raytracer-master\DirectX_Raytracer-master\DX_test1\DX_test1.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.31
