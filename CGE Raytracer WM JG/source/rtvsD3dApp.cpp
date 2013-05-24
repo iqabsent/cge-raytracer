@@ -269,7 +269,7 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 
 
 	// IF axis THEN
-	if (axis)
+	/*if (axis)
 	{
 		pd3dDevice->SetMaterial( &lineMtrl );
 		pd3dDevice->SetTexture( 0, 0 );
@@ -277,7 +277,7 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 		pd3dDevice->SetFVF( LineVertex::FVF_Flags );
 		pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
 		pd3dDevice->DrawPrimitive( D3DPT_LINELIST, 0, numAxisLines );
-	}
+	}*/
 
 
 	// IF quad THEN
@@ -288,38 +288,39 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 		if (quadSolid)
 		{
 			pd3dDevice->SetMaterial( &quadMtrl );
-			pd3dDevice->SetTexture( 0, pTexture );
+			/*pd3dDevice->SetTexture( 0, pTexture );*/
 			pd3dDevice->SetStreamSource( 0, pQuadVertexBuffer, 0, sizeof(QuadVertex) );
 			pd3dDevice->SetFVF( QuadVertex::FVF_Flags );
 			pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 			pd3dDevice->DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, numQuadTriangles );
+			
 		}
 
-		// display wireframe quad
-		if (quadWire)
-		{
-			pd3dDevice->SetMaterial( &lineMtrl );
-			pd3dDevice->SetTexture( 0, 0 );
-			pd3dDevice->SetStreamSource( 0, pQuadVertexBuffer, 0, sizeof(QuadVertex) );
-			pd3dDevice->SetFVF( QuadVertex::FVF_Flags );
-			pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
-			pd3dDevice->DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, numQuadTriangles );
-		}
+		//// display wireframe quad
+		//if (quadWire)
+		//{
+		//	pd3dDevice->SetMaterial( &lineMtrl );
+		//	pd3dDevice->SetTexture( 0, 0 );
+		//	pd3dDevice->SetStreamSource( 0, pQuadVertexBuffer, 0, sizeof(QuadVertex) );
+		//	pd3dDevice->SetFVF( QuadVertex::FVF_Flags );
+		//	pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+		//	pd3dDevice->DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, numQuadTriangles );
+		//}
 
 	}
 
 
-	// IF vectors THEN
+	/* IF vectors THEN
 	if (vectors)
 	{
 
-		// update current key clicked (if any)
+		 update current key clicked (if any)
 		updateKeyboard ();
 
-		// update??
+		 update??
 		if (currentKeyClicked != previousKeyClicked)
 		{
-			// calculate
+			 calculate
 			switch (currentKeyClicked)
 			{
 				case 1:
@@ -360,7 +361,7 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 			previousKeyClicked = currentKeyClicked;
 		}
 
-		// draw
+		 draw
 		if (vectorLineCount > 0 || vectorLineCount < 4)
 		{
 			RECT rect = { 40, 40, 900, 100 };
@@ -376,7 +377,7 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 		}
 	}
 
-
+*/
 	// ok
 	return true;
 
@@ -399,67 +400,67 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 bool rtvsD3dApp::setup ()
 {
 
-    // setup a material for the lines
-    ZeroMemory( &lineMtrl, sizeof(D3DMATERIAL9) );
-	lineMtrl.Emissive.r = 0.5f;
-	lineMtrl.Emissive.g = 0.5f;
-	lineMtrl.Emissive.b = 1.0f;
+ //   // setup a material for the lines
+ //   ZeroMemory( &lineMtrl, sizeof(D3DMATERIAL9) );
+	//lineMtrl.Emissive.r = 0.5f;
+	//lineMtrl.Emissive.g = 0.5f;
+	//lineMtrl.Emissive.b = 1.0f;
 
-	// setup a material for the start vectors
-    ZeroMemory( &vectorStartMtrl, sizeof(D3DMATERIAL9) );
-	vectorStartMtrl.Emissive.r = 0.3f;
-	vectorStartMtrl.Emissive.g = 1.0f;
-	vectorStartMtrl.Emissive.b = 0.3f;
+	//// setup a material for the start vectors
+ //   ZeroMemory( &vectorStartMtrl, sizeof(D3DMATERIAL9) );
+	//vectorStartMtrl.Emissive.r = 0.3f;
+	//vectorStartMtrl.Emissive.g = 1.0f;
+	//vectorStartMtrl.Emissive.b = 0.3f;
 
-	// setup a material for the result vectors
-    ZeroMemory( &vectorResultMtrl, sizeof(D3DMATERIAL9) );
-	vectorResultMtrl.Emissive.r = 1.0f;
-	vectorResultMtrl.Emissive.g = 0.3f;
-	vectorResultMtrl.Emissive.b = 0.3f;
+	//// setup a material for the result vectors
+ //   ZeroMemory( &vectorResultMtrl, sizeof(D3DMATERIAL9) );
+	//vectorResultMtrl.Emissive.r = 1.0f;
+	//vectorResultMtrl.Emissive.g = 0.3f;
+	//vectorResultMtrl.Emissive.b = 0.3f;
 
-	// setup a material for the textured quad
-    ZeroMemory( &quadMtrl, sizeof(D3DMATERIAL9) );
-	quadMtrl.Ambient.r = 1.0f;
-	quadMtrl.Ambient.g = 1.0f;
-	quadMtrl.Ambient.b = 1.0f;
-	quadMtrl.Ambient.a = 1.0f;
-    quadMtrl.Diffuse.r = 1.0f;
-    quadMtrl.Diffuse.g = 1.0f;
-    quadMtrl.Diffuse.b = 1.0f;
-    quadMtrl.Diffuse.a = 1.0f;
-    quadMtrl.Specular.r = 1.0f;
-    quadMtrl.Specular.g = 1.0f;
-    quadMtrl.Specular.b = 1.0f;
-    quadMtrl.Specular.a = 1.0f;
-    quadMtrl.Power = 40.0f;
+	//// setup a material for the textured quad
+ //   ZeroMemory( &quadMtrl, sizeof(D3DMATERIAL9) );
+	//quadMtrl.Ambient.r = 1.0f;
+	//quadMtrl.Ambient.g = 1.0f;
+	//quadMtrl.Ambient.b = 1.0f;
+	//quadMtrl.Ambient.a = 1.0f;
+ //   quadMtrl.Diffuse.r = 1.0f;
+ //   quadMtrl.Diffuse.g = 1.0f;
+ //   quadMtrl.Diffuse.b = 1.0f;
+ //   quadMtrl.Diffuse.a = 1.0f;
+ //   quadMtrl.Specular.r = 1.0f;
+ //   quadMtrl.Specular.g = 1.0f;
+ //   quadMtrl.Specular.b = 1.0f;
+ //   quadMtrl.Specular.a = 1.0f;
+ //   quadMtrl.Power = 40.0f;
 
-    // setup directional sun light
-	ZeroMemory( &sunLight, sizeof(D3DLIGHT9) );
-	sunLight.Type = D3DLIGHT_DIRECTIONAL;
-    sunLight.Direction = D3DXVECTOR3( -1.0f, -1.0f,  1.0f );
-    sunLight.Diffuse.r = 1.0f;
-    sunLight.Diffuse.g = 1.0f;
-    sunLight.Diffuse.b = 1.0f;
-    sunLight.Diffuse.a = 1.0f;
-    sunLight.Specular.r = 1.0f;
-    sunLight.Specular.g = 1.0f;
-    sunLight.Specular.b = 1.0f;
-    sunLight.Specular.a = 1.0f;
+ //   // setup directional sun light
+	//ZeroMemory( &sunLight, sizeof(D3DLIGHT9) );
+	//sunLight.Type = D3DLIGHT_DIRECTIONAL;
+ //   sunLight.Direction = D3DXVECTOR3( -1.0f, -1.0f,  1.0f );
+ //   sunLight.Diffuse.r = 1.0f;
+ //   sunLight.Diffuse.g = 1.0f;
+ //   sunLight.Diffuse.b = 1.0f;
+ //   sunLight.Diffuse.a = 1.0f;
+ //   sunLight.Specular.r = 1.0f;
+ //   sunLight.Specular.g = 1.0f;
+ //   sunLight.Specular.b = 1.0f;
+ //   sunLight.Specular.a = 1.0f;
 
-    // setup directional back light
-	ZeroMemory( &backLight, sizeof(D3DLIGHT9) );
-	backLight.Type = D3DLIGHT_DIRECTIONAL;
-    backLight.Direction = D3DXVECTOR3( 1.0f,  0.0f,  0.0f );
-    backLight.Diffuse.r = 0.0f;
-    backLight.Diffuse.g = 0.2f;
-    backLight.Diffuse.b = 0.5f;
-    backLight.Diffuse.a = 1.0f;
-    backLight.Specular.r = 0.3f;
-    backLight.Specular.g = 0.3f;
-    backLight.Specular.b = 0.3f;
-    backLight.Specular.a = 1.0f;
+ //   // setup directional back light
+	//ZeroMemory( &backLight, sizeof(D3DLIGHT9) );
+	//backLight.Type = D3DLIGHT_DIRECTIONAL;
+ //   backLight.Direction = D3DXVECTOR3( 1.0f,  0.0f,  0.0f );
+ //   backLight.Diffuse.r = 0.0f;
+ //   backLight.Diffuse.g = 0.2f;
+ //   backLight.Diffuse.b = 0.5f;
+ //   backLight.Diffuse.a = 1.0f;
+ //   backLight.Specular.r = 0.3f;
+ //   backLight.Specular.g = 0.3f;
+ //   backLight.Specular.b = 0.3f;
+ //   backLight.Specular.a = 1.0f;
 
-	// ok
+	//// ok
 	return true;
 
 }
@@ -483,30 +484,30 @@ bool rtvsD3dApp::setup ()
 bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 {
 
-	// ---- turn lighting ON ----
-	pd3dDevice->SetRenderState( D3DRS_LIGHTING , TRUE);
+	//// ---- turn lighting ON ----
+	//pd3dDevice->SetRenderState( D3DRS_LIGHTING , TRUE);
 
 
-	// ---- ambient light ----
-	pd3dDevice->SetRenderState( D3DRS_AMBIENT,D3DCOLOR_COLORVALUE( 0.3, 0.3, 0.3, 1.0));
+	//// ---- ambient light ----
+	//pd3dDevice->SetRenderState( D3DRS_AMBIENT,D3DCOLOR_COLORVALUE( 0.3, 0.3, 0.3, 1.0));
 
 
-	// ---- sun light ----
-    pd3dDevice->SetLight( 0, &sunLight );
-    pd3dDevice->LightEnable( 0, TRUE );
+	//// ---- sun light ----
+ //   pd3dDevice->SetLight( 0, &sunLight );
+ //   pd3dDevice->LightEnable( 0, TRUE );
 
 
-	// ---- back light ----
-	pd3dDevice->SetLight( 1, &backLight );
-    pd3dDevice->LightEnable( 1, TRUE );
+	//// ---- back light ----
+	//pd3dDevice->SetLight( 1, &backLight );
+ //   pd3dDevice->LightEnable( 1, TRUE );
 
 
-    // ---- create a texture object ----
-    D3DXCreateTextureFromFile( pd3dDevice, "image/baboon.jpg", &pTexture );
+ //   // ---- create a texture object ----
+ //   D3DXCreateTextureFromFile( pd3dDevice, "image/baboon.jpg", &pTexture );
 
- 	// ---- set texture sampling states ----
-	pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
-    pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
+ //	// ---- set texture sampling states ----
+	//pd3dDevice->SetSamplerState( 0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR );
+ //   pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR );
 
 
 	// ---- FONT ----
@@ -620,7 +621,7 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 	// ---- VECTORS ----
 
 
-	// ---- initialise vector vertex data ----
+	 //---- initialise vector vertex data ----
  	LineVertex vectVertices[] =
 	{
 		//    x      y      z
