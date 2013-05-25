@@ -45,6 +45,10 @@ public:
 	DWORD numQuadTriangles;
 	LPDIRECT3DTEXTURE9 pTexture;
 	D3DMATERIAL9 quadMtrl;
+
+  UCHAR texture[512 * 512 * 4];
+  HRESULT returnvalue;
+  D3DLOCKED_RECT lr;
 	
 	// constructor/destructor
 	rtvsD3dApp();

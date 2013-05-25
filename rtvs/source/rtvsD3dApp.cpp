@@ -106,7 +106,42 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
   pd3dDevice->SetRenderState( D3DRS_LIGHTING , TRUE);
 
   // ---- create a texture object ----
-  D3DXCreateTextureFromFile( pd3dDevice, "image/baboon.jpg", &pTexture );
+  //D3DXCreateTextureFromFile( pd3dDevice, "image/baboon.jpg", &pTexture );
+
+  // try create
+  D3DDISPLAYMODE mode;
+	pd3dDevice->GetDisplayMode( 0, &mode );
+  returnvalue = pd3dDevice->CreateTexture(512, 512, 1, 0,
+		mode.Format, D3DPOOL_MANAGED, &pTexture, NULL);
+
+	if (FAILED(returnvalue)) {
+    // use file if failed
+    D3DXCreateTextureFromFile( pd3dDevice, "image/baboon.jpg", &pTexture );
+  } else {
+    // generate and copy pixels if not
+    returnvalue = pTexture->LockRect(0, &lr, NULL, 0);
+	  if (FAILED(returnvalue))
+      return E_FAIL;
+	
+	  UCHAR* pRect = (UCHAR*) lr.pBits; 
+
+    // just memcpy your image to pRect here
+    for (int y = 0; y < 512; y++) {
+      for (int x = 0; x < 512; x += 4) {
+        texture[x + y * 512] = 0;
+        texture[x + y * 512 + 1] = 255;
+        texture[x + y * 512 + 2] = 255;
+        texture[x + y * 512 + 3] = 255;
+      }
+    }
+	
+    memcpy(pRect,texture,512 * 512 * 4);
+
+	  returnvalue = pTexture->UnlockRect(0);
+	  if (FAILED(returnvalue))
+      return E_FAIL;
+  }
+
 
 	// ---- block copy into axis vertex buffer ----
 	void *pVertices = NULL;
