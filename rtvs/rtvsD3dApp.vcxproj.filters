@@ -16,7 +16,19 @@
     <ClCompile Include="source\rtvsD3dWinLite.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\raytracerInterface.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\twister.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
     <ClCompile Include="source\raytracer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\scene.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="source\surface.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -27,10 +39,22 @@
     <ClInclude Include="header\rtvsD3dWinLite.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="header\common.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="header\raytracerInterface.h">
+      <Filter>header</Filter>
+    </ClInclude>
     <ClInclude Include="header\raytracer.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="header\common.h">
+    <ClInclude Include="header\scene.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="header\surface.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="header\twister.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>

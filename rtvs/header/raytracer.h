@@ -1,39 +1,72 @@
-////////////////////////////////////////////////////////////////////////////////
+// -----------------------------------------------------------
+// raytracer.h
+// 2004 - Jacco Bikker - jacco@bik5.com - www.bik5.com -   <><
+// -----------------------------------------------------------
 
-// ---------- rtvsD3dApp.h ----------
+#ifndef I_RAYTRACER_H
+#define I_RAYTRACER_H
 
-#ifndef _raytracerInterface_
-#define _raytracerInterface_
+#include "common.h"
+#include "twister.h"
 
-#include <windows.h>
-#include <d3d9.h>
-#include <d3dx9.h>
+namespace Raytracer {
 
-static const int WIDTH = 512;
-static const int HEIGHT = 512;
-
-class RaytracerInterface
+// -----------------------------------------------------------
+// Ray class definition
+// -----------------------------------------------------------
+class Ray
 {
-
 public:
-
-  // constructor/destructor & functions
-  RaytracerInterface();
-	RaytracerInterface(int width, int height);
-  void traceNextLine();
-	void raytrace(int x, int y); // returns RGB result for a ray
-  HRESULT save(LPDIRECT3DTEXTURE9 &pTexture);
-  HRESULT render(LPDIRECT3DTEXTURE9 &pTexture); // places texture rendered so far in given buffer
-
-  // properties
-  UCHAR texture[WIDTH * HEIGHT * 4];
-  int m_lastLine, m_width, m_height;
-
-  // used for stuff
-  HRESULT returnvalue;
-  D3DLOCKED_RECT lr;
-  LPDIRECT3DSURFACE9 surface;
-  D3DDISPLAYMODE mode;
+	Ray() : m_Origin( vector3( 0, 0, 0 ) ), m_Direction( vector3( 0, 0, 0 ) ), m_ID( 0 ) {};
+	Ray( vector3& a_Origin, vector3& a_Dir, int a_ID );
+	void SetOrigin( vector3& a_Origin ) { m_Origin = a_Origin; }
+	void SetDirection( vector3& a_Direction ) { m_Direction = a_Direction; }
+	vector3& GetOrigin() { return m_Origin; }
+	vector3& GetDirection() { return m_Direction; }
+	void SetID( int a_ID ) { m_ID = a_ID; }
+	int GetID() { return m_ID; }
+private:
+	vector3 m_Origin;
+	vector3 m_Direction;
+	int m_ID;
 };
 
-#endif _raytracerInterface_
+// -----------------------------------------------------------
+// Engine class definition
+// Raytracer core
+// -----------------------------------------------------------
+class Scene;
+class Primitive;
+class Engine
+{
+public:
+	Engine();
+	~Engine();
+	void SetTarget( Pixel* a_Dest, int a_Width, int a_Height );
+  void SetTarget( int a_Width, int a_Height );
+	Scene* GetScene() { return m_Scene; }
+	int FindNearest( Ray& a_Ray, float& a_Dist, Primitive*& a_Prim );
+	Primitive* Raytrace( Ray& a_Ray, Color& a_Acc, int a_Depth, float a_RIndex, float& a_Dist, float a_Samples, float a_SScale );
+	float CalcShade( Primitive* a_Light, vector3 a_IP, vector3& a_Dir, float a_Samples, float a_SScale );
+	void InitRender( vector3& a_Pos, vector3& a_Target );
+	Primitive* RenderRay( vector3 a_ScreenPos, Color& a_Acc );
+	bool Render();
+
+  vector3 m_P1, m_DX, m_DY;
+protected:
+	// renderer data
+	Scene* m_Scene;
+	Pixel* m_Dest;
+	int m_Width, m_Height, m_CurrLine, m_PPos;
+	Primitive** m_LastRow;
+	Twister m_Twister;
+	//vector3 m_Origin, m_P1, m_P2, m_P3, m_P4, m_DX, m_DY;
+  vector3 m_Origin, m_P2, m_P3, m_P4;
+	// data for regular grid stepping
+	vector3 m_SR, m_CW;
+	int m_CurID;
+};
+
+}; // namespace Raytracer
+
+#endif

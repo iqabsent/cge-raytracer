@@ -14,7 +14,7 @@
 #include <stdio.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-#include "raytracer.h"
+#include "raytracerInterface.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 

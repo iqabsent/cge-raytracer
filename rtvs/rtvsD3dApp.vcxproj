@@ -125,14 +125,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\raytracer.cpp" />
+    <ClCompile Include="source\raytracerInterface.cpp" />
     <ClCompile Include="source\rtvsD3dApp.cpp" />
     <ClCompile Include="source\rtvsD3dWinLite.cpp" />
+    <ClCompile Include="source\scene.cpp" />
+    <ClCompile Include="source\surface.cpp" />
+    <ClCompile Include="source\twister.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\common.h" />
     <ClInclude Include="header\raytracer.h" />
+    <ClInclude Include="header\raytracerInterface.h" />
     <ClInclude Include="header\rtvsD3dApp.h" />
     <ClInclude Include="header\rtvsD3dWinLite.h" />
+    <ClInclude Include="header\scene.h" />
+    <ClInclude Include="header\surface.h" />
+    <ClInclude Include="header\twister.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
