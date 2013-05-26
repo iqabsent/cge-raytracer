@@ -126,12 +126,14 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 	  UCHAR* pRect = (UCHAR*) lr.pBits; 
 
     // just memcpy your image to pRect here
-    for (int y = 0; y < 512 * 4; y++) {
+    int index = 0;
+    for (int y = 0; y < 512; y++) {
       for (int x = 0; x < 512; x++) {
-        texture[x + y * 512] = x % 255; //B
-        texture[x + y * 512 + 1] = x % 255; //G
-        texture[x + y * 512 + 2] = x % 255; //R
-        texture[x + y * 512 + 3] = 0;
+        texture[index * 4] = x / 2; //B
+        texture[index * 4 + 1] = (512 - x) / 2; //G
+        texture[index * 4 + 2] = y / 2; //R
+        texture[index * 4 + 3] = 0;
+        index++;
       }
     }
 	
