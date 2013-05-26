@@ -53,7 +53,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
   g_hWnd = CreateWindowEx( NULL, winClassName, 
                             "Gamlin / Van der Merwe - Raytracer",
                             WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-                            0, 0, 1200, 800, NULL, NULL, hInstance, NULL );
+                            0, 0, 1190, 800, NULL, NULL, hInstance, NULL );
 
 	// IF create window fails THEN end
   if( g_hWnd == NULL )

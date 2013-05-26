@@ -10,8 +10,8 @@
 #include <d3dx9.h>
 #include "raytracer.h"
 
-static const int WIDTH = 512;
-static const int HEIGHT = 512;
+static const int WIDTH = 1280;
+static const int HEIGHT = 900;
 
 class RaytracerInterface
 {

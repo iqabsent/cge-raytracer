@@ -140,10 +140,10 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
  	QuadVertex quadVertices[] =
 	{
 		//    x      y     z      nx     ny     nz    tu     tv
-		{  1.0f,  1.0f, 2.82f,   0.0f,  1.0f,  0.0f,  0.0f,  0.0f },
-		{ -1.0f,  1.0f, 2.82f,   0.0f,  1.0f,  0.0f,  1.0f,  0.0f },
-		{  1.0f, -1.0f, 2.82f,   0.0f,  1.0f,  0.0f,  0.0f,  1.0f },
-		{ -1.0f, -1.0f, 2.82f,   0.0f,  1.0f,  0.0f,  1.0f,  1.0f }
+		{  1.28f,  0.9f, 2.0f,   0.0f,  1.0f,  0.0f,  0.0f,  0.0f }, //top right
+		{ -1.28f,  0.9f, 2.0f,   0.0f,  1.0f,  0.0f,  1.0f,  0.0f }, //top left
+		{  1.28f, -0.9f, 2.0f,   0.0f,  1.0f,  0.0f,  0.0f,  1.0f },
+		{ -1.28f, -0.9f, 2.0f,   0.0f,  1.0f,  0.0f,  1.0f,  1.0f }
 	};
 
 	// ---- create quad vertex buffer ----
