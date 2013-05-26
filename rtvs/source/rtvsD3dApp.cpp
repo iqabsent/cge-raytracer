@@ -126,16 +126,16 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 	  UCHAR* pRect = (UCHAR*) lr.pBits; 
 
     // just memcpy your image to pRect here
-    for (int y = 0; y < 512; y++) {
-      for (int x = 0; x < 512; x += 4) {
-        texture[x + y * 512] = 0;
-        texture[x + y * 512 + 1] = 255;
-        texture[x + y * 512 + 2] = 255;
-        texture[x + y * 512 + 3] = 255;
+    for (int y = 0; y < 512 * 4; y++) {
+      for (int x = 0; x < 512; x++) {
+        texture[x + y * 512] = x % 255; //B
+        texture[x + y * 512 + 1] = x % 255; //G
+        texture[x + y * 512 + 2] = x % 255; //R
+        texture[x + y * 512 + 3] = 0;
       }
     }
 	
-    memcpy(pRect,texture,512 * 512 * 4);
+    memcpy(pRect,texture,sizeof(texture));
 
 	  returnvalue = pTexture->UnlockRect(0);
 	  if (FAILED(returnvalue))
@@ -150,21 +150,21 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
   // ---- initialise quad vertex data ----
  	QuadVertex quadVertices[] =
 	{
-		//    x      y     z      nx     ny     nz     d,   tu     tv
-		{  1.0f,  1.0f, 2.82f,   0.0f,  1.0f,  0.0f,    0,  0.0f,  0.0f },
-		{ -1.0f,  1.0f, 2.82f,   0.0f,  1.0f,  0.0f,    0,  1.0f,  0.0f },
-		{  1.0f, -1.0f, 2.82f,   0.0f,  1.0f,  0.0f,    0,  0.0f,  1.0f },
-		{ -1.0f, -1.0f, 2.82f,   0.0f,  1.0f,  0.0f,    0,  1.0f,  1.0f }
+		//    x      y     z      nx     ny     nz    tu     tv
+		{  1.0f,  1.0f, 2.82f,   0.0f,  1.0f,  0.0f,  0.0f,  0.0f },
+		{ -1.0f,  1.0f, 2.82f,   0.0f,  1.0f,  0.0f,  1.0f,  0.0f },
+		{  1.0f, -1.0f, 2.82f,   0.0f,  1.0f,  0.0f,  0.0f,  1.0f },
+		{ -1.0f, -1.0f, 2.82f,   0.0f,  1.0f,  0.0f,  1.0f,  1.0f }
 	};
 
 	// ---- create quad vertex buffer ----
-	int numQuadVertices = sizeof(quadVertices) / ( sizeof(float) * 8 +  sizeof(DWORD));
+	int numQuadVertices = sizeof(quadVertices) / ( sizeof(float) * 8 /* +  sizeof(DWORD)*/);
 	numQuadTriangles = numQuadVertices / 2;
 	pd3dDevice->CreateVertexBuffer( numQuadVertices*sizeof(QuadVertex),
                                       D3DUSAGE_WRITEONLY,
                                       QuadVertex::FVF_Flags,
-                                      //D3DPOOL_MANAGED, // does not have to be properly Released before calling IDirect3DDevice9::Reset
-                                      D3DPOOL_DEFAULT,   // must be Released properly before calling IDirect3DDevice9::Reset
+                                      D3DPOOL_MANAGED, // does not have to be properly Released before calling IDirect3DDevice9::Reset
+                                      //D3DPOOL_DEFAULT,   // must be Released properly before calling IDirect3DDevice9::Reset
                                       &pQuadVertexBuffer, NULL );
 
 	// ---- block copy into quad vertex buffer ----
