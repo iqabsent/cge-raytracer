@@ -20,6 +20,7 @@ public:
 	Raytracer(int width, int height);
   void traceNextLine();
 	void raytrace(int x, int y); // returns RGB result for a ray
+  HRESULT save(LPDIRECT3DTEXTURE9 &pTexture);
   HRESULT render(LPDIRECT3DTEXTURE9 &pTexture); // places texture rendered so far in given buffer
 
   // properties
@@ -29,6 +30,8 @@ public:
   // used for stuff
   HRESULT returnvalue;
   D3DLOCKED_RECT lr;
+  LPDIRECT3DSURFACE9 surface;
+  D3DDISPLAYMODE mode;
 };
 
 #endif _raytracer_

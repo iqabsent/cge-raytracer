@@ -56,6 +56,7 @@ public:
 	bool display(LPDIRECT3DDEVICE9);
 	bool setup();
 	bool setupDX(LPDIRECT3DDEVICE9);
+  bool save(LPDIRECT3DDEVICE9);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
