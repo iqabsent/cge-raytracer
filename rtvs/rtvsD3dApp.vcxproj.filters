@@ -16,12 +16,21 @@
     <ClCompile Include="source\rtvsD3dWinLite.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="source\raytracer.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header\rtvsD3dApp.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="header\rtvsD3dWinLite.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="header\raytracer.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="header\common.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>
