@@ -1,11 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 // ---------- rtvsD3dApp.h ----------
-/*!
-\file rtvsD3dWinLite.h
-\brief interface for the rtvsD3dApp class
-\author Gareth Edwards
-*/
 
 #ifndef _rtvsD3dApp_
 #define _rtvsD3dApp_
@@ -19,6 +14,7 @@
 #include <stdio.h>
 #include <d3d9.h>
 #include <d3dx9.h>
+#include "raytracer.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -27,12 +23,13 @@ struct QuadVertex
 {
     float x , y, z;
     float nx, ny, nz;
-	  DWORD diffuse;
+	  //DWORD diffuse;
     float tu, tv;
 
     enum FVF
     {
-        FVF_Flags = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1
+        //FVF_Flags = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1
+        FVF_Flags = D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1
     };
 };
 
@@ -46,9 +43,11 @@ public:
 	LPDIRECT3DTEXTURE9 pTexture;
 	D3DMATERIAL9 quadMtrl;
 
-  UCHAR texture[512 * 512 * 4];
+  UCHAR texture[WIDTH * HEIGHT * 4];
   HRESULT returnvalue;
   D3DLOCKED_RECT lr;
+
+  Raytracer* pTracer;
 	
 	// constructor/destructor
 	rtvsD3dApp();

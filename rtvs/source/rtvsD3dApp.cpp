@@ -73,6 +73,14 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 	// set render states
 	pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
+// trace all lines
+pTracer->traceNextLine();
+
+// try to render
+returnvalue = pTracer->render(pTexture);
+if (FAILED(returnvalue))
+  return false;
+
 	// display solid textured quad
 	pd3dDevice->SetMaterial( &quadMtrl );
 	pd3dDevice->SetTexture( 0, pTexture );
@@ -95,6 +103,9 @@ bool rtvsD3dApp::setup ()
 	quadMtrl.Ambient.g = 1.0f;
 	quadMtrl.Ambient.b = 1.0f;
 
+  // create a raytracer
+  pTracer = new Raytracer(WIDTH, HEIGHT);
+
 	// ok
 	return true;
 }
@@ -109,41 +120,11 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
   //D3DXCreateTextureFromFile( pd3dDevice, "image/baboon.jpg", &pTexture );
 
   // try create
-  D3DDISPLAYMODE mode;
-	pd3dDevice->GetDisplayMode( 0, &mode );
-  returnvalue = pd3dDevice->CreateTexture(512, 512, 1, 0,
-		mode.Format, D3DPOOL_MANAGED, &pTexture, NULL);
+  returnvalue = pd3dDevice->CreateTexture(WIDTH, HEIGHT, 1, 0,
+		D3DFMT_X8B8G8R8, D3DPOOL_MANAGED, &pTexture, NULL);
 
-	if (FAILED(returnvalue)) {
-    // use file if failed
-    D3DXCreateTextureFromFile( pd3dDevice, "image/baboon.jpg", &pTexture );
-  } else {
-    // generate and copy pixels if not
-    returnvalue = pTexture->LockRect(0, &lr, NULL, 0);
-	  if (FAILED(returnvalue))
-      return E_FAIL;
-	
-	  UCHAR* pRect = (UCHAR*) lr.pBits; 
-
-    // just memcpy your image to pRect here
-    int index = 0;
-    for (int y = 0; y < 512; y++) {
-      for (int x = 0; x < 512; x++) {
-        texture[index * 4] = x / 2; //B
-        texture[index * 4 + 1] = (512 - x) / 2; //G
-        texture[index * 4 + 2] = y / 2; //R
-        texture[index * 4 + 3] = 0;
-        index++;
-      }
-    }
-	
-    memcpy(pRect,texture,sizeof(texture));
-
-	  returnvalue = pTexture->UnlockRect(0);
-	  if (FAILED(returnvalue))
-      return E_FAIL;
-  }
-
+	if (FAILED(returnvalue))
+    return E_FAIL;
 
 	// ---- block copy into axis vertex buffer ----
 	void *pVertices = NULL;

@@ -78,13 +78,17 @@ int WINAPI WinMain( HINSTANCE hInstance,
 	// WHILE NOT quit, handle messages and display
   while( uMsg.message != WM_QUIT )
   {
-      if( PeekMessage( &uMsg, NULL, 0, 0, PM_REMOVE ) )
-      { 
-          TranslateMessage( &uMsg );
-          DispatchMessage( &uMsg );
-      }
-      else
-          display();
+    if( PeekMessage( &uMsg, NULL, 0, 0, PM_REMOVE ) )
+    { 
+      // handle message
+      TranslateMessage( &uMsg );
+      DispatchMessage( &uMsg );
+    }
+    else
+      // render line
+
+      // show what's been rendered so far
+      display();
   }
 
 	// device dependent cleanup
