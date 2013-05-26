@@ -73,13 +73,13 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 	// set render states
 	pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-// trace all lines
-pTracer->traceNextLine();
+  // trace line by line
+  pTracer->traceNextLine();
 
-// try to render
-returnvalue = pTracer->render(pTexture);
-if (FAILED(returnvalue))
-  return false;
+  // try to render
+  returnvalue = pTracer->render(pTexture);
+  if (FAILED(returnvalue))
+    return false;
 
 	// display solid textured quad
 	pd3dDevice->SetMaterial( &quadMtrl );
@@ -159,4 +159,10 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 	// ok
 	return true;
 
+}
+
+// ---------- framework : save to file ----------
+bool rtvsD3dApp::save(LPDIRECT3DDEVICE9 pd3dDevice)
+{
+  return pTracer->save(pTexture);
 }

@@ -56,3 +56,15 @@ HRESULT Raytracer::render(LPDIRECT3DTEXTURE9 &pTexture)
   // ok
   return NOERROR;
 }
+
+HRESULT Raytracer::save(LPDIRECT3DTEXTURE9 &pTexture)
+{
+  returnvalue = D3DXSaveTextureToFile("render.jpg", D3DXIFF_JPG, pTexture, NULL);
+
+  if (FAILED(returnvalue))
+    return E_FAIL;
+
+  // ok
+  return NOERROR;
+}
+

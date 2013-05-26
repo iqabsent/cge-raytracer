@@ -130,9 +130,13 @@ LRESULT CALLBACK WindowProc( HWND   hWnd,
                     PostQuitMessage(0);
                     break;
 
-				case VK_F1:
-					g_bHandleWindowResize = !g_bHandleWindowResize;
-					break;
+				        case VK_F1:
+					        g_bHandleWindowResize = !g_bHandleWindowResize;
+					        break;
+
+                case VK_SPACE:
+					        g_app->save(g_pd3dDevice);
+				
             }
         }
         break;
