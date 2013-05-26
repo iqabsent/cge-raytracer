@@ -2,22 +2,24 @@
 
 // ---------- rtvsD3dApp.h ----------
 
-#ifndef _raytracer_
-#define _raytracer_
+#ifndef _raytracerInterface_
+#define _raytracerInterface_
 
 #include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-#include "common.h"
 
-class Raytracer
+static const int WIDTH = 512;
+static const int HEIGHT = 512;
+
+class RaytracerInterface
 {
 
 public:
 
   // constructor/destructor & functions
-  Raytracer();
-	Raytracer(int width, int height);
+  RaytracerInterface();
+	RaytracerInterface(int width, int height);
   void traceNextLine();
 	void raytrace(int x, int y); // returns RGB result for a ray
   HRESULT save(LPDIRECT3DTEXTURE9 &pTexture);
@@ -34,4 +36,4 @@ public:
   D3DDISPLAYMODE mode;
 };
 
-#endif _raytracer_
+#endif _raytracerInterface_

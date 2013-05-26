@@ -1,20 +1,20 @@
 #include "../header/raytracer.h"
 
 // ---------- constructor ----------
-Raytracer::Raytracer(){
+RaytracerInterface::RaytracerInterface(){
   // initialise
-  ZeroMemory( this, sizeof(Raytracer) );
+  ZeroMemory( this, sizeof(RaytracerInterface) );
 }
 
-Raytracer::Raytracer(int width, int height)
+RaytracerInterface::RaytracerInterface(int width, int height)
 {
 	// initialise
-  ZeroMemory( this, sizeof(Raytracer) );
+  ZeroMemory( this, sizeof(RaytracerInterface) );
   m_width = width;
   m_height = height;
 }
 
-void Raytracer::raytrace(int x, int y)
+void RaytracerInterface::raytrace(int x, int y)
 {
   // render a pixel (x? and R, G, B values)
   texture[(y * m_width + x) * 4] = x * 0.5f; //B
@@ -23,7 +23,7 @@ void Raytracer::raytrace(int x, int y)
   texture[(y * m_width + x) * 4 + 3] = 0;
 }
 
-void Raytracer::traceNextLine()
+void RaytracerInterface::traceNextLine()
 {
   // render a whole line
   for (int x = 0; x < m_width; x++) {
@@ -37,7 +37,7 @@ void Raytracer::traceNextLine()
   }
 }
 
-HRESULT Raytracer::render(LPDIRECT3DTEXTURE9 &pTexture)
+HRESULT RaytracerInterface::render(LPDIRECT3DTEXTURE9 &pTexture)
 {
   // just memcpy your image to pRect here
   
@@ -57,7 +57,7 @@ HRESULT Raytracer::render(LPDIRECT3DTEXTURE9 &pTexture)
   return NOERROR;
 }
 
-HRESULT Raytracer::save(LPDIRECT3DTEXTURE9 &pTexture)
+HRESULT RaytracerInterface::save(LPDIRECT3DTEXTURE9 &pTexture)
 {
   returnvalue = D3DXSaveTextureToFile("render.jpg", D3DXIFF_JPG, pTexture, NULL);
 

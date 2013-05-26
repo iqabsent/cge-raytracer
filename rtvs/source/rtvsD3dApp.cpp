@@ -104,7 +104,7 @@ bool rtvsD3dApp::setup ()
 	quadMtrl.Ambient.b = 1.0f;
 
   // create a raytracer
-  pTracer = new Raytracer(WIDTH, HEIGHT);
+  pTracer = new RaytracerInterface(WIDTH, HEIGHT);
 
 	// ok
 	return true;
@@ -119,9 +119,15 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
   // ---- create a texture object ----
   //D3DXCreateTextureFromFile( pd3dDevice, "image/baboon.jpg", &pTexture );
 
+  // get mode
+  D3DDISPLAYMODE mode;
+  returnvalue = pd3dDevice->GetDisplayMode(0, &mode);
+  if (FAILED(returnvalue))
+    return E_FAIL;
+
   // try create
   returnvalue = pd3dDevice->CreateTexture(WIDTH, HEIGHT, 1, 0,
-		D3DFMT_X8B8G8R8, D3DPOOL_MANAGED, &pTexture, NULL);
+		mode.Format, D3DPOOL_MANAGED, &pTexture, NULL);
 
 	if (FAILED(returnvalue))
     return E_FAIL;

@@ -47,7 +47,7 @@ public:
   HRESULT returnvalue;
   D3DLOCKED_RECT lr;
 
-  Raytracer* pTracer;
+  RaytracerInterface* pTracer;
 	
 	// constructor/destructor
 	rtvsD3dApp();
