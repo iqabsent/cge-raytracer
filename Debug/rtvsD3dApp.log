@@ -1,0 +1,19 @@
+﻿Build started 27/05/2013 07:54:49.
+     1>Project "C:\Users\James\Desktop\cge-raytracer\rtvs\rtvsD3dApp.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating ".\Debug\rtvsD3dApp.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         All outputs are up-to-date.
+       Link:
+         All outputs are up-to-date.
+         rtvsD3dApp.vcxproj -> C:\Users\James\Desktop\cge-raytracer\rtvs\.\Debug\rtvsD3dApp.exe
+       BscMake:
+         All outputs are up-to-date.
+       FinalizeBuildStatus:
+         Deleting file ".\Debug\rtvsD3dApp.unsuccessfulbuild".
+         Touching ".\Debug\rtvsD3dApp.lastbuildstate".
+     1>Done Building Project "C:\Users\James\Desktop\cge-raytracer\rtvs\rtvsD3dApp.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.03
