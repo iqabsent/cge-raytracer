@@ -19,16 +19,13 @@
     <ClCompile Include="source\raytracerInterface.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\twister.cpp">
-      <Filter>source</Filter>
-    </ClCompile>
     <ClCompile Include="source\raytracer.cpp">
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\scene.cpp">
       <Filter>source</Filter>
     </ClCompile>
-    <ClCompile Include="source\surface.cpp">
+    <ClCompile Include="source\twister.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -49,9 +46,6 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="header\scene.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="header\surface.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="header\twister.h">

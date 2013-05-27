@@ -15,6 +15,8 @@
 #include <d3d9.h>
 #include <d3dx9.h>
 #include "raytracerInterface.h"
+#include "scene.h"
+#include "common.h"
 #include "../AntTweakBar/include/AntTweakBar.h"
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -64,12 +64,13 @@ public:
 	float GetVScale() { return m_VScale; }
 	float GetUScaleReci() { return m_RUScale; }
 	float GetVScaleReci() { return m_RVScale; }
-private:
+//private:
 	Color m_Color;
 	float m_Refl, m_Refr;
 	float m_Diff, m_Spec;
 	float m_DRefl;
 	float m_RIndex;
+private:
 	Texture* m_Texture;
 	float m_UScale, m_VScale, m_RUScale, m_RVScale;
 };
@@ -81,6 +82,7 @@ private:
 class Primitive
 {
 public:
+	Material* m_Material;
 	enum
 	{
 		SPHERE = 1,
@@ -103,7 +105,6 @@ public:
 	void SetName( char* a_Name );
 	char* GetName() { return m_Name; }
 protected:
-	Material* m_Material;
 	char* m_Name;
 	bool m_Light;
 	int m_RayID;
@@ -126,9 +127,10 @@ public:
 	vector3 GetNormal( vector3& a_Pos ) { return (a_Pos - m_Centre) * m_RRadius; }
 	Color GetColor( vector3& a_Pos );
 	aabb GetAABB();
-private:
+//private:
 	vector3 m_Centre;
 	float m_SqRadius, m_Radius, m_RRadius;
+private:
 	vector3 m_Ve, m_Vn, m_Vc;
 };
 
@@ -217,8 +219,8 @@ public:
 	aabb& GetExtends() { return m_Extends; }
 private:
 	int m_Primitives, m_Lights;
-	Primitive** m_Primitive;
-	Primitive** m_Light;
+ 	Primitive** m_Primitive;
+ 	Primitive** m_Light;
 	ObjectList** m_Grid;
 	aabb m_Extends;
 };

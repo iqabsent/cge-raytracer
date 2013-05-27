@@ -222,16 +222,15 @@ bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
 
   TwBar *myBar;
   myBar = TwNewBar("Options");
+  TwDefine(" Options label='Raytracer Options' refresh=0.5 position='16 16' size='260 320' alpha=0");
 
 //   TwStructMember primitive[] = {
 //     { "name", TW_TYPE_FLOAT, offsetof(primitive, property), " Min=-5 Max=5 " },
 //     { "direction", TW_TYPE_DIR3F, offsetof(wave, z), " Min=-5 Max=5 " }
 //   };
 
- struct position {
-   float x, y, z;
- };
-
+  // for camera position..
+  struct position { float x, y, z; };
   TwStructMember positionMembers[] = {
     {"x", TW_TYPE_FLOAT, offsetof(position, x), " Min=-10 Max=10 " },
     {"y", TW_TYPE_FLOAT, offsetof(position, y), " Min=-10 Max=10 " },
@@ -239,24 +238,47 @@ bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
   };
   TwType positionType = TwDefineStruct("Position", positionMembers, 3, sizeof(position), NULL, NULL);
 
+  Raytracer::Primitive* primitive;
+  int primCount = m_pTracer->tracer->GetScene()->GetNrPrimitives();
+  for (int i = 0; i < primCount; i++) {
+    static char label[64];
+    primitive = m_pTracer->tracer->GetScene()->GetPrimitive(i);
+    int type = primitive->GetType();
+    switch (type)
+    {
+      case Raytracer::Primitive::SPHERE:
+          if(primitive->IsLight())
+          {
+            // add a light
+            sprintf_s(label, 64, "Light [%d]", i+1);
+            TwAddVarRW(myBar, label, TW_TYPE_COLOR3F, &primitive->m_Material->m_Color, " group='Lights' " );
+          }
+          else
+          {
+            // add a sphere
+          }
+        break;
+      case Raytracer::Primitive::PLANE:
+          // add a plane
+        break;
+      case Raytracer::Primitive::AABB:
+          // add a box
+        break;
+    }
+  }
 
+  TwDefine(" Options/Lights group='Settings' "); // put camera group into settings group
 
-  TwAddSeparator(myBar, "sepCamera", " group='Settings' " );
-  TwAddButton(myBar, "Camera", NULL, NULL, " group='Settings' ");
-  TwAddVarRW(myBar, "Position", positionType, &m_pTracer->m_cameraPosition, " group='Settings' ");
-  TwAddVarRW(myBar, "camTarget", TW_TYPE_DIR3F, &m_pTracer->m_cameraTarget, " group='Settings' label=Direction Min=-1 Max=1 ");
-
+  TwAddVarRW(myBar, "Position", positionType, &m_pTracer->m_cameraPosition, " group='Camera' ");
+  TwAddVarRW(myBar, "Target", TW_TYPE_DIR3F, &m_pTracer->m_cameraTarget, " group='Camera' ");
+  TwDefine(" Options/Camera group='Settings' "); // put camera group into settings group
   TwAddSeparator(myBar, "sepReset", " group='Settings' ");
-  TwAddButton(myBar, "Reset", TW_reset, this, " label='Reset' group='Settings' ");
+  TwAddButton(myBar, "Reset", TW_reset, this, " group='Settings' " );
+  TwAddSeparator(myBar, "sepActions", " group='Settings' ");
 
-  TwAddSeparator(myBar, "sepActions", NULL);
   TwAddVarRW(myBar, "Render", TW_TYPE_BOOLCPP, &m_antShouldRender, NULL);
-  TwAddButton(myBar, "Cancel", TW_cancel, this, " label='Cancel' ");
-  TwAddButton(myBar, "Save", TW_save, this, " label='Save' ");
-
-  TwDefine(" Settings/camPos group='Camera' ");
-  TwDefine(" Settings/camTarget group='Camera' ");
-  TwDefine(" myBar/Primitives group='Settings' ");
+  TwAddButton(myBar, "Cancel", TW_cancel, this, NULL);
+  TwAddButton(myBar, "Save", TW_save, this, NULL);
 
   return true;
 }
