@@ -53,6 +53,8 @@ bool rtvsD3dApp::cleanupDX (LPDIRECT3DDEVICE9 pd3dDevice)
       pQuadVertexBuffer = NULL;
   }
 
+  TwTerminate();//cleanup anttweakbar
+
 	// ok
 	return true;
 
@@ -61,6 +63,7 @@ bool rtvsD3dApp::cleanupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 // ---------- framework : display ----------
 bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 {
+	
 
  	// clear backbuffers
   pd3dDevice->Clear( 0,
@@ -92,9 +95,21 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 	pd3dDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 	pd3dDevice->DrawPrimitive( D3DPT_TRIANGLESTRIP, 0, numQuadTriangles );
 
+	TwDraw();  // draw the tweak bar GUI
+
 	// ok
 	return true;
 
+}
+void TW_CALL TW_render(void *clientData) //AntTweakBar Buttons
+{
+	rtvsD3dApp* renderPointer = (rtvsD3dApp*)clientData;
+	renderPointer->start();
+}
+void TW_CALL TW_cancel(void *clientData) //AntTweakBar Buttons
+{
+	rtvsD3dApp* cancelPointer = (rtvsD3dApp*)clientData;
+	cancelPointer->reset();
 }
 
 // ---------- framework : setup ----------
@@ -167,6 +182,16 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 	pQuadVertexBuffer->Lock( 0, sizeof(quadVertices), (void**)&pVertices, 0 );
 	memcpy( pVertices, quadVertices, sizeof(quadVertices) );
 	pQuadVertexBuffer->Unlock();
+
+	TwInit(TW_DIRECT3D9, pd3dDevice); // for Direct3D 9
+	TwWindowSize(1200, 850);
+	
+	TwBar *myBar;
+	myBar = TwNewBar("Raytracer Options");
+
+	TwAddButton(myBar, "Render", TW_render, this, " label='Start Render' ");
+	TwAddButton(myBar, "Cancel", TW_cancel, this, " label='Cancel Render' ");
+
 
 	// ok
 	return true;
