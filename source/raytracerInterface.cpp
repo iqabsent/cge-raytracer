@@ -18,6 +18,7 @@ RaytracerInterface::RaytracerInterface(int width, int height)
   m_width = width;
   m_height = height;
   m_shouldRender = false;
+  m_isRenderDone = false;
   tracer = new Raytracer::Engine();
 // this should be tunneled into to control scene from AntTweakBar
   tracer->GetScene()->InitScene();
@@ -40,7 +41,8 @@ void RaytracerInterface::raytrace(int x, int y)
 void RaytracerInterface::resetRender(LPDIRECT3DTEXTURE9 &pTexture)
 {
   m_lastLine = 0;
-  m_shouldRender = 0;
+  m_shouldRender = false;
+  m_isRenderDone = false;
   ZeroMemory(&m_texture, sizeof(m_texture));
   render(pTexture);
 }
@@ -100,6 +102,7 @@ bool RaytracerInterface::traceNextLine()
   if (m_lastLine >= m_height) {
     m_lastLine = 0;
     m_shouldRender = false;
+    m_isRenderDone = true;
   }
 
   return m_shouldRender;

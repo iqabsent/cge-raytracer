@@ -32,6 +32,7 @@ public:
   UCHAR m_texture[WIDTH * HEIGHT * 4];
   int m_lastLine, m_width, m_height;
   bool m_shouldRender;
+  bool m_isRenderDone;
 
   // used for stuff
   HRESULT returnvalue;

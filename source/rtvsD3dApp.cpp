@@ -63,8 +63,6 @@ bool rtvsD3dApp::cleanupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 // ---------- framework : display ----------
 bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 {
-	
-
  	// clear backbuffers
   pd3dDevice->Clear( 0,
 	NULL,
@@ -73,16 +71,37 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 	1.0f,
 	0);
 
-	// set render states
-	pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
-
-  if(shouldRender)
+  // check if should render
+  if (m_antShouldRender) { // ant says render
+    if (
+      !m_pTracer->m_shouldRender // tracer isn't rendering
+      && !m_pTracer->m_isRenderDone // tracer isn't done
+    ) { 
+      // tell it to render
+      m_pTracer->startRender();
+    }
+    else if (
+      !m_pTracer->m_shouldRender // tracer isn't rendering
+      && m_pTracer->m_isRenderDone // tracer is done
+    ) {
+      m_pTracer->resetRender(pTexture);
+      m_pTracer->startRender();
+    }
+  }
+  else // ant says don't render
   {
-    // trace line by line
-    shouldRender = pTracer->traceNextLine();
+    if(m_pTracer->m_shouldRender) // tracer is rendering
+      m_pTracer->m_shouldRender = false; // tell it to stop
+  }
+
+  // if tracer should be rendering
+  if(m_pTracer->m_shouldRender)
+  {
+    // trace line by line & check if done
+    m_antShouldRender = m_pTracer->traceNextLine();
 
     // try to render
-    returnvalue = pTracer->render(pTexture);
+    returnvalue = m_pTracer->render(pTexture);
     if (FAILED(returnvalue))
       return false;
   }
@@ -101,16 +120,6 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 	return true;
 
 }
-void TW_CALL TW_render(void *clientData) //AntTweakBar Buttons
-{
-	rtvsD3dApp* renderPointer = (rtvsD3dApp*)clientData;
-	renderPointer->start();
-}
-void TW_CALL TW_cancel(void *clientData) //AntTweakBar Buttons
-{
-	rtvsD3dApp* cancelPointer = (rtvsD3dApp*)clientData;
-	cancelPointer->reset();
-}
 
 // ---------- framework : setup ----------
 bool rtvsD3dApp::setup ()
@@ -122,9 +131,8 @@ bool rtvsD3dApp::setup ()
 	quadMtrl.Ambient.b = 1.0f;
 
   // create a raytracer
-  pTracer = new RaytracerInterface(WIDTH, HEIGHT);
-
-  shouldRender = false;
+  m_pTracer = new RaytracerInterface(WIDTH, HEIGHT);
+  m_antShouldRender = false;
 
 	// ok
 	return true;
@@ -133,8 +141,8 @@ bool rtvsD3dApp::setup ()
 // ---------- framework : setup dx ----------
 bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 {
-
-  pd3dDevice->SetRenderState( D3DRS_LIGHTING , TRUE);
+  pd3dDevice->SetRenderState( D3DRS_LIGHTING , TRUE );
+  pd3dDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE );
   pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_GAUSSIANQUAD );
 
   // ---- create a texture object ----
@@ -146,17 +154,16 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
   if (FAILED(returnvalue))
     return E_FAIL;
 
-  // try create
+  // try create texture
   returnvalue = pd3dDevice->CreateTexture(WIDTH, HEIGHT, 1, 0,
 		mode.Format, D3DPOOL_MANAGED, &pTexture, NULL);
 
 	if (FAILED(returnvalue))
     return E_FAIL;
 
-	// ---- block copy into axis vertex buffer ----
-	void *pVertices = NULL;
-
+	
 	// ---- QUAD ----
+  void *pVertices = NULL;
   // ---- initialise quad vertex data ----
  	QuadVertex quadVertices[] =
 	{
@@ -183,38 +190,51 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 	memcpy( pVertices, quadVertices, sizeof(quadVertices) );
 	pQuadVertexBuffer->Unlock();
 
-	TwInit(TW_DIRECT3D9, pd3dDevice); // for Direct3D 9
-	TwWindowSize(1200, 850);
-	
-	TwBar *myBar;
-	myBar = TwNewBar("Raytracer Options");
-
-	TwAddButton(myBar, "Render", TW_render, this, " label='Start Render' ");
-	TwAddButton(myBar, "Cancel", TW_cancel, this, " label='Cancel Render' ");
-
+  setupAntTW(pd3dDevice);
 
 	// ok
 	return true;
+}
 
+// ------ AntTweakBar stuff ----------------
+// ------ AntTweakBar functions ------------
+void TW_CALL TW_cancel(void *clientData) //AntTweakBar Buttons
+{
+  rtvsD3dApp* cancelPointer = (rtvsD3dApp*)clientData;
+  cancelPointer->reset();
+}
+void TW_CALL TW_save(void *clientData) //AntTweakBar Buttons
+{
+  rtvsD3dApp* savePointer = (rtvsD3dApp*)clientData;
+  savePointer->save();
+}
+
+// ------ AntTweakBar setup -----------------
+bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
+{
+  TwInit(TW_DIRECT3D9, pd3dDevice); // for Direct3D 9
+
+  TwBar *myBar;
+  myBar = TwNewBar("Raytracer Options");
+
+  //TwAddVarRW(myBar, "Render", TW_TYPE_BOOLCPP, &shouldRender, NULL);
+  bool hi = true;
+  TwAddVarRW(myBar, "Render", TW_TYPE_BOOLCPP, &m_antShouldRender, NULL);
+  TwAddButton(myBar, "Cancel", TW_cancel, this, " label='Cancel' ");
+  TwAddButton(myBar, "Save", TW_save, this, " label='Save' ");
+
+  return true;
 }
 
 // ---------- framework : save to file ----------
-bool rtvsD3dApp::save(LPDIRECT3DDEVICE9 pd3dDevice)
+bool rtvsD3dApp::save()
 {
-  return pTracer->save(pTexture);
+  return m_pTracer->save(pTexture);
 }
 
 // ---------- framework : reset render ----------
 void rtvsD3dApp::reset()
 {
-  pTracer->resetRender(pTexture);
-  shouldRender = false;
-}
-
-// ---------- framework : start render ----------
-void rtvsD3dApp::start()
-{
-  pTracer->resetRender(pTexture);
-  pTracer->startRender();
-  shouldRender = true;
+  m_pTracer->resetRender(pTexture);
+  m_antShouldRender = false;
 }

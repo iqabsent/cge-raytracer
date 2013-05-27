@@ -37,18 +37,19 @@ struct QuadVertex
 // ---------- rtvsD3dApp class interface ----------
 class rtvsD3dApp  
 {
-
-public:
-	LPDIRECT3DVERTEXBUFFER9	pQuadVertexBuffer;
-	DWORD numQuadTriangles;
-	LPDIRECT3DTEXTURE9 pTexture;
-	D3DMATERIAL9 quadMtrl;
+  LPDIRECT3DVERTEXBUFFER9	pQuadVertexBuffer;
+  DWORD numQuadTriangles;
+  LPDIRECT3DTEXTURE9 pTexture;
+  D3DMATERIAL9 quadMtrl;
 
   HRESULT returnvalue;
   D3DLOCKED_RECT lr;
-  bool shouldRender;
 
-  RaytracerInterface* pTracer;
+public:
+	
+  bool m_antShouldRender;
+
+  RaytracerInterface* m_pTracer;
 	
 	// constructor/destructor
 	rtvsD3dApp();
@@ -57,9 +58,10 @@ public:
 	bool display(LPDIRECT3DDEVICE9);
 	bool setup();
 	bool setupDX(LPDIRECT3DDEVICE9);
-  bool save(LPDIRECT3DDEVICE9);
-  void reset();
+  bool setupAntTW(LPDIRECT3DDEVICE9);
+  bool save();
   void start();
+  void reset();
 };
 
 ////////////////////////////////////////////////////////////////////////////////

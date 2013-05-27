@@ -117,10 +117,6 @@ LRESULT CALLBACK WindowProc( HWND   hWnd,
                              WPARAM wParam,
                              LPARAM lParam )
 {
-    static POINT ptLastMousePosit;
-    static POINT ptCurrentMousePosit;
-    static bool bMousing;
-
 	if( TwEventWin(hWnd, msg, wParam, lParam) ) // send event message to AntTweakBar
 	{return 0;} // event has been handled by AntTweakBar
     
@@ -139,18 +135,18 @@ LRESULT CALLBACK WindowProc( HWND   hWnd,
 					        break;
 
                 case VK_RETURN:
-                  g_app->save(g_pd3dDevice);
+//                  g_app->save();
                   break;
 
                 case VK_SPACE:
-					        if (g_app->shouldRender)
-                  {
-                    g_app->reset();
-                  }
-                  else
-                  {
-                    g_app->start();
-                  }
+// 					        if (g_app->m_shouldRender)
+//                   {
+//                     g_app->reset();
+//                   }
+//                   else
+//                   {
+//                     g_app->start();
+//                   }
 
 				          break;
             }
