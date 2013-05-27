@@ -34,6 +34,10 @@ public:
   bool m_shouldRender;
   bool m_isRenderDone;
 
+  // scene cam stuff
+  Raytracer::vector3 m_cameraPosition;
+  Raytracer::vector3 m_cameraTarget;
+
   // used for stuff
   HRESULT returnvalue;
   D3DLOCKED_RECT lr;

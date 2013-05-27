@@ -24,19 +24,11 @@ RaytracerInterface::RaytracerInterface(int width, int height)
   tracer->GetScene()->InitScene();
   tracer->SetTarget( m_width, m_height );
 // this should be using parameterized values
-  tracer->InitRender( Raytracer::vector3( -2, 0, -2 ), Raytracer::vector3( 0, 0.8f, 5 ) );
+  m_cameraPosition = Raytracer::vector3( 0, 0, 0 );
+  m_cameraTarget = Raytracer::vector3( 0, 0, -1.0f );
+  m_cameraTarget.Normalize();
+  tracer->InitRender( m_cameraPosition, m_cameraPosition - m_cameraTarget);
 }
-
-/*
-void RaytracerInterface::raytrace(int x, int y)
-{
-  // render a pixel (x? and R, G, B values)
-  texture[(y * m_width + x) * 4] = x * 0.5f; //B
-  texture[(y * m_width + x) * 4 + 1] = (m_width - x) * 0.5f; //G
-  texture[(y * m_width + x) * 4 + 2] = y * 0.5f; //R
-  texture[(y * m_width + x) * 4 + 3] = 0;
-}
-*/
 
 void RaytracerInterface::resetRender(LPDIRECT3DTEXTURE9 &pTexture)
 {
@@ -45,6 +37,8 @@ void RaytracerInterface::resetRender(LPDIRECT3DTEXTURE9 &pTexture)
   m_isRenderDone = false;
   ZeroMemory(&m_texture, sizeof(m_texture));
   render(pTexture);
+  m_cameraTarget.Normalize();
+  tracer->InitRender( m_cameraPosition, m_cameraPosition - Raytracer::vector3(m_cameraTarget.x,-m_cameraTarget.y,m_cameraTarget.z));
 }
 
 void RaytracerInterface::startRender()

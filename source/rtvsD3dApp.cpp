@@ -84,6 +84,7 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
       !m_pTracer->m_shouldRender // tracer isn't rendering
       && m_pTracer->m_isRenderDone // tracer is done
     ) {
+      // reset and tell it to render
       m_pTracer->resetRender(pTexture);
       m_pTracer->startRender();
     }
@@ -201,7 +202,12 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 void TW_CALL TW_cancel(void *clientData) //AntTweakBar Buttons
 {
   rtvsD3dApp* cancelPointer = (rtvsD3dApp*)clientData;
-  cancelPointer->reset();
+  cancelPointer->resetRender();
+}
+void TW_CALL TW_reset(void *clientData) //AntTweakBar Buttons
+{
+  rtvsD3dApp* cancelPointer = (rtvsD3dApp*)clientData;
+  cancelPointer->resetSettings();
 }
 void TW_CALL TW_save(void *clientData) //AntTweakBar Buttons
 {
@@ -215,13 +221,42 @@ bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
   TwInit(TW_DIRECT3D9, pd3dDevice); // for Direct3D 9
 
   TwBar *myBar;
-  myBar = TwNewBar("Raytracer Options");
+  myBar = TwNewBar("Options");
 
-  //TwAddVarRW(myBar, "Render", TW_TYPE_BOOLCPP, &shouldRender, NULL);
-  bool hi = true;
+//   TwStructMember primitive[] = {
+//     { "name", TW_TYPE_FLOAT, offsetof(primitive, property), " Min=-5 Max=5 " },
+//     { "direction", TW_TYPE_DIR3F, offsetof(wave, z), " Min=-5 Max=5 " }
+//   };
+
+ struct position {
+   float x, y, z;
+ };
+
+  TwStructMember positionMembers[] = {
+    {"x", TW_TYPE_FLOAT, offsetof(position, x), " Min=-10 Max=10 " },
+    {"y", TW_TYPE_FLOAT, offsetof(position, y), " Min=-10 Max=10 " },
+    {"z", TW_TYPE_FLOAT, offsetof(position, z), " Min=-10 Max=10 " }
+  };
+  TwType positionType = TwDefineStruct("Position", positionMembers, 3, sizeof(position), NULL, NULL);
+
+
+
+  TwAddSeparator(myBar, "sepCamera", " group='Settings' " );
+  TwAddButton(myBar, "Camera", NULL, NULL, " group='Settings' ");
+  TwAddVarRW(myBar, "Position", positionType, &m_pTracer->m_cameraPosition, " group='Settings' ");
+  TwAddVarRW(myBar, "camTarget", TW_TYPE_DIR3F, &m_pTracer->m_cameraTarget, " group='Settings' label=Direction Min=-1 Max=1 ");
+
+  TwAddSeparator(myBar, "sepReset", " group='Settings' ");
+  TwAddButton(myBar, "Reset", TW_reset, this, " label='Reset' group='Settings' ");
+
+  TwAddSeparator(myBar, "sepActions", NULL);
   TwAddVarRW(myBar, "Render", TW_TYPE_BOOLCPP, &m_antShouldRender, NULL);
   TwAddButton(myBar, "Cancel", TW_cancel, this, " label='Cancel' ");
   TwAddButton(myBar, "Save", TW_save, this, " label='Save' ");
+
+  TwDefine(" Settings/camPos group='Camera' ");
+  TwDefine(" Settings/camTarget group='Camera' ");
+  TwDefine(" myBar/Primitives group='Settings' ");
 
   return true;
 }
@@ -233,8 +268,16 @@ bool rtvsD3dApp::save()
 }
 
 // ---------- framework : reset render ----------
-void rtvsD3dApp::reset()
+void rtvsD3dApp::resetRender()
 {
   m_pTracer->resetRender(pTexture);
   m_antShouldRender = false;
+}
+
+// ---------- framework : reset render ----------
+void rtvsD3dApp::resetSettings()
+{
+  m_pTracer->m_cameraPosition = Raytracer::vector3( 0, 0, 0 );
+  m_pTracer->m_cameraTarget = Raytracer::vector3( 0, 0, -1.0f );
+  m_pTracer->m_cameraTarget.Normalize();
 }

@@ -429,8 +429,8 @@ float Engine::CalcShade( Primitive* a_Light, vector3 a_IP, vector3& a_Dir, float
 // -----------------------------------------------------------
 void Engine::InitRender( vector3& a_Pos, vector3& a_Target )
 {
-	// set firts line to draw to
-	m_CurrLine = 20;
+	// set first line to draw to
+	m_CurrLine = 0;
 	// set pixel buffer address of first pixel
 	m_PPos = m_CurrLine * m_Width;
 	// allocate space to store pointers to primitives for previous line

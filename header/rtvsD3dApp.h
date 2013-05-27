@@ -61,7 +61,8 @@ public:
   bool setupAntTW(LPDIRECT3DDEVICE9);
   bool save();
   void start();
-  void reset();
+  void resetRender();
+  void resetSettings();
 };
 
 ////////////////////////////////////////////////////////////////////////////////
