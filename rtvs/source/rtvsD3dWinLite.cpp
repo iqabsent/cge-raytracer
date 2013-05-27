@@ -53,7 +53,7 @@ int WINAPI WinMain( HINSTANCE hInstance,
   g_hWnd = CreateWindowEx( NULL, winClassName, 
                             "Gamlin / Van der Merwe - Raytracer",
                             WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-                            0, 0, 1190, 800, NULL, NULL, hInstance, NULL );
+                            0, 0, 1190, 830, NULL, NULL, hInstance, NULL );
 
 	// IF create window fails THEN end
   if( g_hWnd == NULL )
@@ -85,10 +85,11 @@ int WINAPI WinMain( HINSTANCE hInstance,
       DispatchMessage( &uMsg );
     }
     else
+    {
       // render line
-
       // show what's been rendered so far
       display();
+    }
   }
 
 	// device dependent cleanup
@@ -134,9 +135,21 @@ LRESULT CALLBACK WindowProc( HWND   hWnd,
 					        g_bHandleWindowResize = !g_bHandleWindowResize;
 					        break;
 
+                case VK_RETURN:
+                  g_app->save(g_pd3dDevice);
+                  break;
+
                 case VK_SPACE:
-					        g_app->save(g_pd3dDevice);
-				
+					        if (g_app->shouldRender)
+                  {
+                    g_app->reset();
+                  }
+                  else
+                  {
+                    g_app->start();
+                  }
+
+				          break;
             }
         }
         break;

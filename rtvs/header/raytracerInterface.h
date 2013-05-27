@@ -21,14 +21,17 @@ public:
   // constructor/destructor & functions
   RaytracerInterface();
 	RaytracerInterface(int width, int height);
-  void traceNextLine();
+  bool traceNextLine();
+  void resetRender(LPDIRECT3DTEXTURE9 &pTexture);
+  void startRender();
 	//void raytrace(int x, int y); // returns RGB result for a ray
   HRESULT save(LPDIRECT3DTEXTURE9 &pTexture);
   HRESULT render(LPDIRECT3DTEXTURE9 &pTexture); // places texture rendered so far in given buffer
 
   // properties
-  UCHAR texture[WIDTH * HEIGHT * 4];
+  UCHAR m_texture[WIDTH * HEIGHT * 4];
   int m_lastLine, m_width, m_height;
+  bool m_shouldRender;
 
   // used for stuff
   HRESULT returnvalue;

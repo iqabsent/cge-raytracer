@@ -43,9 +43,9 @@ public:
 	LPDIRECT3DTEXTURE9 pTexture;
 	D3DMATERIAL9 quadMtrl;
 
-  UCHAR texture[WIDTH * HEIGHT * 4];
   HRESULT returnvalue;
   D3DLOCKED_RECT lr;
+  bool shouldRender;
 
   RaytracerInterface* pTracer;
 	
@@ -57,6 +57,8 @@ public:
 	bool setup();
 	bool setupDX(LPDIRECT3DDEVICE9);
   bool save(LPDIRECT3DDEVICE9);
+  void reset();
+  void start();
 };
 
 ////////////////////////////////////////////////////////////////////////////////

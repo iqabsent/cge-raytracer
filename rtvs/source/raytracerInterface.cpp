@@ -17,7 +17,9 @@ RaytracerInterface::RaytracerInterface(int width, int height)
   ZeroMemory( this, sizeof(RaytracerInterface) );
   m_width = width;
   m_height = height;
+  m_shouldRender = false;
   tracer = new Raytracer::Engine();
+// this should be tunneled into to control scene from AntTweakBar
   tracer->GetScene()->InitScene();
   tracer->SetTarget( m_width, m_height );
 // this should be using parameterized values
@@ -35,7 +37,20 @@ void RaytracerInterface::raytrace(int x, int y)
 }
 */
 
-void RaytracerInterface::traceNextLine()
+void RaytracerInterface::resetRender(LPDIRECT3DTEXTURE9 &pTexture)
+{
+  m_lastLine = 0;
+  m_shouldRender = 0;
+  ZeroMemory(&m_texture, sizeof(m_texture));
+  render(pTexture);
+}
+
+void RaytracerInterface::startRender()
+{
+  m_shouldRender = true;
+}
+
+bool RaytracerInterface::traceNextLine()
 {
   // render a whole line
   Raytracer::Primitive* lastprim = 0;
@@ -71,10 +86,10 @@ void RaytracerInterface::traceNextLine()
     }
 
     //m_Dest[m_PPos++] = (red << 16) + (green << 8) + blue;
-    texture[(m_lastLine * m_width + x) * 4] = blue; //B
-    texture[(m_lastLine * m_width + x) * 4 + 1] = green; //G
-    texture[(m_lastLine * m_width + x) * 4 + 2] = red; //R
-    texture[(m_lastLine * m_width + x) * 4 + 3] = 0;
+    m_texture[(m_lastLine * m_width + x) * 4] = blue; //B
+    m_texture[(m_lastLine * m_width + x) * 4 + 1] = green; //G
+    m_texture[(m_lastLine * m_width + x) * 4 + 2] = red; //R
+    m_texture[(m_lastLine * m_width + x) * 4 + 3] = 0;
 
     lpos += tracer->m_DX;
   }
@@ -84,7 +99,10 @@ void RaytracerInterface::traceNextLine()
   // wrap around on last line (or stop?)
   if (m_lastLine >= m_height) {
     m_lastLine = 0;
+    m_shouldRender = false;
   }
+
+  return m_shouldRender;
 }
 
 HRESULT RaytracerInterface::render(LPDIRECT3DTEXTURE9 &pTexture)
@@ -97,7 +115,7 @@ HRESULT RaytracerInterface::render(LPDIRECT3DTEXTURE9 &pTexture)
 	
 	UCHAR* pRect = (UCHAR*) lr.pBits; 
 
-  memcpy(pRect,texture,sizeof(texture));
+  memcpy(pRect,m_texture,sizeof(m_texture));
 
 	returnvalue = pTexture->UnlockRect(0);
 	if (FAILED(returnvalue))

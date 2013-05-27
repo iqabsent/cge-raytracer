@@ -73,13 +73,16 @@ bool rtvsD3dApp::display (LPDIRECT3DDEVICE9 pd3dDevice)
 	// set render states
 	pd3dDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
 
-  // trace line by line
-  pTracer->traceNextLine();
+  if(shouldRender)
+  {
+    // trace line by line
+    shouldRender = pTracer->traceNextLine();
 
-  // try to render
-  returnvalue = pTracer->render(pTexture);
-  if (FAILED(returnvalue))
-    return false;
+    // try to render
+    returnvalue = pTracer->render(pTexture);
+    if (FAILED(returnvalue))
+      return false;
+  }
 
 	// display solid textured quad
 	pd3dDevice->SetMaterial( &quadMtrl );
@@ -106,6 +109,8 @@ bool rtvsD3dApp::setup ()
   // create a raytracer
   pTracer = new RaytracerInterface(WIDTH, HEIGHT);
 
+  shouldRender = false;
+
 	// ok
 	return true;
 }
@@ -115,6 +120,7 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 {
 
   pd3dDevice->SetRenderState( D3DRS_LIGHTING , TRUE);
+  pd3dDevice->SetSamplerState( 0, D3DSAMP_MAGFILTER, D3DTEXF_GAUSSIANQUAD );
 
   // ---- create a texture object ----
   //D3DXCreateTextureFromFile( pd3dDevice, "image/baboon.jpg", &pTexture );
@@ -140,10 +146,10 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
  	QuadVertex quadVertices[] =
 	{
 		//    x      y     z      nx     ny     nz    tu     tv
-		{  1.28f,  0.9f, 2.0f,   0.0f,  1.0f,  0.0f,  0.0f,  0.0f }, //top right
-		{ -1.28f,  0.9f, 2.0f,   0.0f,  1.0f,  0.0f,  1.0f,  0.0f }, //top left
-		{  1.28f, -0.9f, 2.0f,   0.0f,  1.0f,  0.0f,  0.0f,  1.0f },
-		{ -1.28f, -0.9f, 2.0f,   0.0f,  1.0f,  0.0f,  1.0f,  1.0f }
+		{  1.28f,  0.93f, 2.0f,   0.0f,  1.0f,  0.0f,  0.0f,  0.0f }, //top right
+		{ -1.28f,  0.93f, 2.0f,   0.0f,  1.0f,  0.0f,  1.0f,  0.0f }, //top left
+		{  1.28f, -0.93f, 2.0f,   0.0f,  1.0f,  0.0f,  0.0f,  1.0f },
+		{ -1.28f, -0.93f, 2.0f,   0.0f,  1.0f,  0.0f,  1.0f,  1.0f }
 	};
 
 	// ---- create quad vertex buffer ----
@@ -171,4 +177,19 @@ bool rtvsD3dApp::setupDX (LPDIRECT3DDEVICE9 pd3dDevice)
 bool rtvsD3dApp::save(LPDIRECT3DDEVICE9 pd3dDevice)
 {
   return pTracer->save(pTexture);
+}
+
+// ---------- framework : reset render ----------
+void rtvsD3dApp::reset()
+{
+  pTracer->resetRender(pTexture);
+  shouldRender = false;
+}
+
+// ---------- framework : start render ----------
+void rtvsD3dApp::start()
+{
+  pTracer->resetRender(pTexture);
+  pTracer->startRender();
+  shouldRender = true;
 }
