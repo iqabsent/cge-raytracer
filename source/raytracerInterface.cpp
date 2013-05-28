@@ -24,7 +24,7 @@ RaytracerInterface::RaytracerInterface(int width, int height)
   tracer->GetScene()->InitScene();
   tracer->SetTarget( m_width, m_height );
 // this should be using parameterized values
-  m_cameraPosition = Raytracer::vector3( 0, 0, 0 );
+  m_cameraPosition = Raytracer::vector3( -1.0f, 0, 0 );
   m_cameraTarget = Raytracer::vector3( 0, 0, -1.0f );
   m_cameraTarget.Normalize();
   tracer->InitRender( m_cameraPosition, m_cameraPosition - m_cameraTarget);

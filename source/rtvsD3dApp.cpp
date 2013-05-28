@@ -275,7 +275,7 @@ bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
 
             sprintf_s(label, 32, "Refraction%d", i+1);
             sprintf_s(def, 128, " group='Sphere%d' label='Refraction' Min=0 Max=2.0 step=0.1 precision=1 ", i+1);
-            TwAddVarRW(myBar, label, TW_TYPE_FLOAT, &((Raytracer::Sphere*)primitive)->m_Material->m_Refr, def );
+            TwAddVarRW(myBar, label, TW_TYPE_FLOAT, &((Raytracer::Sphere*)primitive)->m_Material->m_Refr, def  );
 
             sprintf_s(label, 32, "Diffuse%d", i+1);
             sprintf_s(def, 128, " group='Sphere%d' label='Diffuse' Min=0 Max=5.0 step=0.1 precision=1 ", i+1);

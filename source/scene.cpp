@@ -11,9 +11,9 @@
 
 namespace Raytracer {
 
-// -----------------------------------------------------------
-// Primitive class implementation
-// -----------------------------------------------------------
+
+// Primitive class
+
 
 void Primitive::SetName( char* a_Name )
 {
@@ -22,9 +22,9 @@ void Primitive::SetName( char* a_Name )
 	strcpy( m_Name, a_Name ); 
 }
 
-// -----------------------------------------------------------
-// Texture class implementation
-// -----------------------------------------------------------
+
+// Texture class
+
 
 Texture::Texture( Color* a_Bitmap, int a_Width, int a_Height ) :
 	m_Bitmap( a_Bitmap ),
@@ -87,9 +87,9 @@ Color Texture::GetTexel( float a_U, float a_V )
 	return c1 * w1 + c2 * w2 + c3 * w3 + c4 * w4;
 }
 
-// -----------------------------------------------------------
-// Material class implementation
-// -----------------------------------------------------------
+
+// Material class
+
 
 Material::Material() :
 	m_Color( Color( 0.2f, 0.2f, 0.2f ) ),
@@ -107,9 +107,9 @@ void Material::SetUVScale( float a_UScale, float a_VScale )
 	m_RVScale = 1.0f / a_VScale;
 }
 
-// -----------------------------------------------------------
-// Sphere primitive methods
-// -----------------------------------------------------------
+
+// Sphere primitive
+
 
 Sphere::Sphere( vector3& a_Centre, float a_Radius ) : 
 	m_Centre( a_Centre ), m_SqRadius( a_Radius * a_Radius ), 
@@ -214,9 +214,8 @@ aabb Sphere::GetAABB()
 	return aabb( m_Centre - size, size * 2 );
 }
 
-// -----------------------------------------------------------
-// Plane primitive class implementation
-// -----------------------------------------------------------
+
+// Plane primitive class
 
 PlanePrim::PlanePrim( vector3& a_Normal, float a_D ) : 
 	m_Plane( plane( a_Normal, a_D ) )
@@ -281,9 +280,7 @@ vector3 PlanePrim::GetNormal( vector3& a_Pos )
 	return m_Plane.N;
 }
 
-// -----------------------------------------------------------
-// Axis aligned box primitive class implementation
-// -----------------------------------------------------------
+// Axis aligned box primitive class
 
 Box::Box() : 
 	m_Box( vector3( 0, 0, 0 ), vector3( 0, 0, 0 ) ), 
@@ -401,9 +398,9 @@ void Box::Light( bool a_Light )
 	}
 }
 
-// -----------------------------------------------------------
-// Scene class implementation
-// -----------------------------------------------------------
+
+// Scene
+
 
 Scene::~Scene()
 {
@@ -413,41 +410,37 @@ Scene::~Scene()
 void Scene::InitScene()
 {
 	m_Primitive = new Primitive*[25000];
-	// ground plane
+	
+	// floor
 	m_Primitive[0] = new PlanePrim( vector3( 0, 1, 0 ), 3.0f );
 	m_Primitive[0]->SetName( "plane" );
-	m_Primitive[0]->GetMaterial()->SetReflection( 0.8f );
+	m_Primitive[0]->GetMaterial()->SetReflection( 0.3f );
 	m_Primitive[0]->GetMaterial()->SetRefraction( 0 );
 	m_Primitive[0]->GetMaterial()->SetDiffuse( 0.7f );
 	m_Primitive[0]->GetMaterial()->SetSpecular( 0.5f );
 	m_Primitive[0]->GetMaterial()->SetColor( Color( 0.4f, 0.3f, 0.3f ) );
-	// m_Primitive[0]->GetMaterial()->SetDiffuseRefl( 0.05f );
-	//m_Primitive[0]->GetMaterial()->SetTexture( new Texture( "textures/marble.tga" ) );
+	m_Primitive[0]->GetMaterial()->SetTexture( new Texture( "textures/floor.tga" ) );
 	m_Primitive[0]->GetMaterial()->SetUVScale( 0.05f, 0.05f );
+	
 	// big sphere
-	m_Primitive[1] = new Sphere( vector3( 0, 0.5f, 4 ), 2 );
+	m_Primitive[1] = new Sphere( vector3( 2, 0.8f, 3 ), 2.5f );
 	m_Primitive[1]->SetName( "big sphere" );
-	m_Primitive[1]->GetMaterial()->SetReflection( 0.05f );
-	m_Primitive[1]->GetMaterial()->SetRefraction( 0.5f );
-  m_Primitive[1]->GetMaterial()->SetRefrIndex( 1.5f );
-	m_Primitive[1]->GetMaterial()->SetDiffuse( 0.5f );
-	m_Primitive[1]->GetMaterial()->SetSpecular( 0.8f );
-	m_Primitive[1]->GetMaterial()->SetColor( Color( 0.5f, 0.2f, 0.1f ) );
-	// m_Primitive[1]->GetMaterial()->SetDiffuseRefl( 0.3f );
-	//m_Primitive[1]->GetMaterial()->SetTexture( new Texture( "textures/wood.tga" ) );
-	m_Primitive[1]->GetMaterial()->SetUVScale( 0.8f, 0.8f );
-	// small sphere
-	m_Primitive[2] = new Sphere( vector3( -5, -0.8f, 7 ), 2 );
+	m_Primitive[1]->GetMaterial()->SetReflection( 0.4f );
+	m_Primitive[1]->GetMaterial()->SetRefraction( 0.8f );
+	m_Primitive[1]->GetMaterial()->SetRefrIndex( 1.3f );
+	m_Primitive[1]->GetMaterial()->SetColor( Color( 0.7f, 0.7f, 1.0f ) );
+
+	// small sphere 
+	m_Primitive[2] = new Sphere( vector3( 3.0f, 0.5f, 10 ), 1 );
 	m_Primitive[2]->SetName( "small sphere" );
-	m_Primitive[2]->GetMaterial()->SetReflection( 0.2f );
+	m_Primitive[2]->GetMaterial()->SetReflection( 0.0f );
 	m_Primitive[2]->GetMaterial()->SetRefraction( 0.0f );
 	m_Primitive[2]->GetMaterial()->SetDiffuse( 0.7f );
-	m_Primitive[2]->GetMaterial()->SetColor( Color( 0.7f, 0.7f, 1.0f ) );
-	//m_Primitive[2]->GetMaterial()->SetTexture( new Texture( "textures/wood.tga" ) );
+	m_Primitive[2]->GetMaterial()->SetColor( Color( 0.7f, 0.2f, 0.0f ) );
 	m_Primitive[2]->GetMaterial()->SetUVScale( 0.8f, 0.8f );
-	// m_Primitive[2]->GetMaterial()->SetDiffuseRefl( 0.6f );
-	// third sphere
-	m_Primitive[3] = new Sphere( vector3( 5, -0.8f, 7 ), 2 );
+
+	// medium sphere
+	m_Primitive[3] = new Sphere( vector3( -7, 5, 17 ), 1.7f );
 	m_Primitive[3]->SetName( "small sphere" );
 	m_Primitive[3]->GetMaterial()->SetReflection( 0.6f );
 	m_Primitive[3]->GetMaterial()->SetRefraction( 0.0f );
@@ -455,50 +448,51 @@ void Scene::InitScene()
 	m_Primitive[3]->GetMaterial()->SetDiffuse( 0.4f );
 	m_Primitive[3]->GetMaterial()->SetColor( Color( 0.8f, 0.8f, 1.0f ) );
 	m_Primitive[3]->GetMaterial()->SetUVScale( 0.8f, 0.8f );
-	//m_Primitive[3]->GetMaterial()->SetTexture( new Texture( "textures/wood.tga" ) );
-	// back plane
+	
+	// back side
 	m_Primitive[4] = new PlanePrim( vector3( 0, 0, -1 ), 22.4f );
 	m_Primitive[4]->SetName( "backplane" );
 	m_Primitive[4]->GetMaterial()->SetReflection( 0.0f );
 	m_Primitive[4]->GetMaterial()->SetRefraction( 0.0f );
 	m_Primitive[4]->GetMaterial()->SetDiffuse( 1.0f );
 	m_Primitive[4]->GetMaterial()->SetColor( Color( 0.6f, 0.5f, 0.5f ) );
-	//m_Primitive[4]->GetMaterial()->SetTexture( new Texture( "textures/wood.tga" ) );
 	m_Primitive[4]->GetMaterial()->SetUVScale( 0.1f, 0.1f );
-	// left plane
+	
+	// left side
 	m_Primitive[5] = new PlanePrim( vector3( 1, 0, 0 ), 10 );
 	m_Primitive[5]->SetName( "backplane" );
 	m_Primitive[5]->GetMaterial()->SetReflection( 0.0f );
 	m_Primitive[5]->GetMaterial()->SetRefraction( 0.0f );
 	m_Primitive[5]->GetMaterial()->SetDiffuse( 1.0f );
 	m_Primitive[5]->GetMaterial()->SetColor( Color( 0.5f, 0.5f, 0.6f ) );
-	//m_Primitive[5]->GetMaterial()->SetTexture( new Texture( "textures/wood.tga" ) );
 	m_Primitive[5]->GetMaterial()->SetUVScale( 0.1f, 0.1f );
-	// right plane
+	
+	// right side
 	m_Primitive[6] = new PlanePrim( vector3( -1, 0, 0 ), 10 );
 	m_Primitive[6]->SetName( "backplane" );
 	m_Primitive[6]->GetMaterial()->SetReflection( 0.0f );
 	m_Primitive[6]->GetMaterial()->SetRefraction( 0.0f );
 	m_Primitive[6]->GetMaterial()->SetDiffuse( 1.0f );
 	m_Primitive[6]->GetMaterial()->SetColor( Color( 0.5f, 0.5f, 0.6f ) );
-	//m_Primitive[6]->GetMaterial()->SetTexture( new Texture( "textures/wood.tga" ) );
 	m_Primitive[6]->GetMaterial()->SetUVScale( 0.1f, 0.1f );
+	
 	// ceiling
-	m_Primitive[7] = new PlanePrim( vector3( 0, -1, 0 ), 5.2f );
-	m_Primitive[7]->SetName( "ceiling" );
+	m_Primitive[7] = new PlanePrim( vector3( 0, -1, 0 ), 7.4f );
+	m_Primitive[7]->SetName( "back plane" );
 	m_Primitive[7]->GetMaterial()->SetReflection( 0.0f );
 	m_Primitive[7]->GetMaterial()->SetRefraction( 0.0f );
+	m_Primitive[7]->GetMaterial()->SetSpecular( 1.0f );
 	m_Primitive[7]->GetMaterial()->SetDiffuse( 1.0f );
-	m_Primitive[7]->GetMaterial()->SetColor( Color( 0.7f, 0.7f, 0.7f ) );
-	// m_Primitive[7]->GetMaterial()->SetTexture( new Texture( "textures/wood.tga" ) );
-	m_Primitive[7]->GetMaterial()->SetUVScale( 0.4f, 0.4f );
-	// statue
-	m_Primitive[8] = new Box( aabb( vector3( -1.5f, -3, 2.5f ), vector3( 3, 1.5f, 3 ) ) );
-	m_Primitive[8]->GetMaterial()->SetReflection( 0.0f );
+	m_Primitive[7]->GetMaterial()->SetColor( Color( 0.4f, 0.7f, 0.7f ) );
+	
+	// box
+	m_Primitive[8] = new Box( aabb( vector3( -4.5f, -3, 2.5f ), vector3( 2, 2, 2 ) ) );
+	m_Primitive[8]->GetMaterial()->SetReflection( 0.1f );
 	m_Primitive[8]->GetMaterial()->SetRefraction( 0.0f );
 	m_Primitive[8]->GetMaterial()->SetDiffuse( 1.0f );
 	m_Primitive[8]->GetMaterial()->SetColor( Color( 0.7f, 0.7f, 0.7f ) );
-	// m_Primitive[8]->GetMaterial()->SetTexture( new Texture( "textures/marble.tga" ) );
+	m_Primitive[8]->GetMaterial()->SetUVScale( 0.4f, 0.4f );
+
 	m_Primitive[8]->GetMaterial()->SetUVScale( 0.4f, 0.4f );
 #if 0
 	// area light
@@ -515,7 +509,7 @@ void Scene::InitScene()
 	m_Primitive[9]->GetMaterial()->SetColor( Color( 0.6f, 0.6f, 0.7f ) );
 	m_Primitive[10] = new Sphere( vector3( 2, 5, -2 ), 0.1f );
 	m_Primitive[10]->Light( true );
-	m_Primitive[10]->GetMaterial()->SetColor( Color( 1.0f, 0.0f, 1.0f ) );
+	m_Primitive[10]->GetMaterial()->SetColor( Color( 1.0f, 0.8f, 1.0f ) );
 #endif
 	// test mesh
 	m_Primitives = 11;
