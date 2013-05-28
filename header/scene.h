@@ -127,8 +127,8 @@ public:
 	vector3 GetNormal( vector3& a_Pos ) { return (a_Pos - m_Centre) * m_RRadius; }
 	Color GetColor( vector3& a_Pos );
 	aabb GetAABB();
-//private:
-	vector3 m_Centre;
+//private
+  vector3 m_Centre;
 	float m_SqRadius, m_Radius, m_RRadius;
 private:
 	vector3 m_Ve, m_Vn, m_Vc;

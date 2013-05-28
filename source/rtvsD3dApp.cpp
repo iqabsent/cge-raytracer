@@ -224,11 +224,6 @@ bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
   myBar = TwNewBar("Options");
   TwDefine(" Options label='Raytracer Options' refresh=0.5 position='16 16' size='260 320' alpha=0");
 
-//   TwStructMember primitive[] = {
-//     { "name", TW_TYPE_FLOAT, offsetof(primitive, property), " Min=-5 Max=5 " },
-//     { "direction", TW_TYPE_DIR3F, offsetof(wave, z), " Min=-5 Max=5 " }
-//   };
-
   // for camera position..
   struct position { float x, y, z; };
   TwStructMember positionMembers[] = {
@@ -241,7 +236,9 @@ bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
   Raytracer::Primitive* primitive;
   int primCount = m_pTracer->tracer->GetScene()->GetNrPrimitives();
   for (int i = 0; i < primCount; i++) {
-    static char label[64];
+    static char label[32];
+    static char def[128];
+    static char grouping[64];
     primitive = m_pTracer->tracer->GetScene()->GetPrimitive(i);
     int type = primitive->GetType();
     switch (type)
@@ -250,12 +247,50 @@ bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
           if(primitive->IsLight())
           {
             // add a light
-            sprintf_s(label, 64, "Light [%d]", i+1);
-            TwAddVarRW(myBar, label, TW_TYPE_COLOR3F, &primitive->m_Material->m_Color, " group='Lights' " );
+            sprintf_s(label, 32, "Color%d", i+1);
+            sprintf_s(def, 128, " group='Light%d' label='Color' ", i+1);
+            TwAddVarRW(myBar, label, TW_TYPE_COLOR3F, &primitive->m_Material->m_Color, def );
+
+            sprintf_s(label, 32, "Position%d", i+1);
+            sprintf_s(def, 128, " group='Light%d' label='Position' ", i+1);
+            TwAddVarRW(myBar, label, positionType, &((Raytracer::Sphere*)primitive)->m_Centre, def );
+            
+            sprintf_s(grouping, 64, " Options/Light%d group='Lights'", i+1);
+            TwDefine(grouping);
           }
           else
           {
             // add a sphere
+            sprintf_s(label, 32, "Color%d", i+1);
+            sprintf_s(def, 128, " group='Sphere%d' label='Color' ", i+1);
+            TwAddVarRW(myBar, label, TW_TYPE_COLOR3F, &primitive->m_Material->m_Color, def );
+
+            sprintf_s(label, 32, "Position%d", i+1);
+            sprintf_s(def, 128, " group='Sphere%d' label='Position' ", i+1);
+            TwAddVarRW(myBar, label, positionType, &((Raytracer::Sphere*)primitive)->m_Centre, def );
+
+            sprintf_s(label, 32, "Reflection%d", i+1);
+            sprintf_s(def, 128, " group='Sphere%d' label='Reflection' Min=0 Max=2.0 step=0.1 precision=1 ", i+1);
+            TwAddVarRW(myBar, label, TW_TYPE_FLOAT, &((Raytracer::Sphere*)primitive)->m_Material->m_Refl, def );
+
+            sprintf_s(label, 32, "Refraction%d", i+1);
+            sprintf_s(def, 128, " group='Sphere%d' label='Refraction' Min=0 Max=2.0 step=0.1 precision=1 ", i+1);
+            TwAddVarRW(myBar, label, TW_TYPE_FLOAT, &((Raytracer::Sphere*)primitive)->m_Material->m_Refr, def );
+
+            sprintf_s(label, 32, "Diffuse%d", i+1);
+            sprintf_s(def, 128, " group='Sphere%d' label='Diffuse' Min=0 Max=5.0 step=0.1 precision=1 ", i+1);
+            TwAddVarRW(myBar, label, TW_TYPE_FLOAT, &((Raytracer::Sphere*)primitive)->m_Material->m_Diff, def );
+
+            sprintf_s(label, 32, "Specular%d", i+1);
+            sprintf_s(def, 128, " group='Sphere%d' label='Specular' Min=0 Max=2.5 step=0.1 precision=1 ", i+1);
+            TwAddVarRW(myBar, label, TW_TYPE_FLOAT, &((Raytracer::Sphere*)primitive)->m_Material->m_Spec, def );
+
+            sprintf_s(label, 32, "Refraction Index%d", i+1);
+            sprintf_s(def, 128, " group='Sphere%d' label='Refraction Index' Min=0 Max=5 step=0.1 precision=1 ", i+1);
+            TwAddVarRW(myBar, label, TW_TYPE_FLOAT, &((Raytracer::Sphere*)primitive)->m_Material->m_RIndex, def );
+
+            sprintf_s(grouping, 64, " Options/Sphere%d group='Spheres' opened=false ", i+1);
+            TwDefine(grouping);
           }
         break;
       case Raytracer::Primitive::PLANE:
@@ -267,7 +302,8 @@ bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
     }
   }
 
-  TwDefine(" Options/Lights group='Settings' "); // put camera group into settings group
+  TwDefine(" Options/Lights group='Settings' opened=false "); // put camera group into settings group
+  TwDefine(" Options/Spheres group='Settings' opened=false "); // put camera group into settings group
 
   TwAddVarRW(myBar, "Position", positionType, &m_pTracer->m_cameraPosition, " group='Camera' ");
   TwAddVarRW(myBar, "Target", TW_TYPE_DIR3F, &m_pTracer->m_cameraTarget, " group='Camera' ");
@@ -276,11 +312,20 @@ bool rtvsD3dApp::setupAntTW(LPDIRECT3DDEVICE9 pd3dDevice)
   TwAddButton(myBar, "Reset", TW_reset, this, " group='Settings' " );
   TwAddSeparator(myBar, "sepActions", " group='Settings' ");
 
-  TwAddVarRW(myBar, "Render", TW_TYPE_BOOLCPP, &m_antShouldRender, NULL);
+  TwAddVarRW(myBar, "Render", TW_TYPE_BOOLCPP, &m_antShouldRender, " key=SPACE ");
   TwAddButton(myBar, "Cancel", TW_cancel, this, NULL);
-  TwAddButton(myBar, "Save", TW_save, this, NULL);
+  TwAddButton(myBar, "Save", TW_save, this, " key=ENTER " );
 
   return true;
+}
+
+// ---------- framework : reset render (reset AntTW too..) ----------
+void rtvsD3dApp::resetSettings()
+{
+  m_pTracer->m_cameraPosition = Raytracer::vector3( 0, 0, 0 );
+  m_pTracer->m_cameraTarget = Raytracer::vector3( 0, 0, -1.0f );
+  ((Raytracer::Sphere*)m_pTracer->tracer->GetScene()->GetLight(0))->m_Centre = Raytracer::vector3(4.0f, 4.0f, -4.0f);
+  ((Raytracer::Sphere*)m_pTracer->tracer->GetScene()->GetLight(1))->m_Centre = Raytracer::vector3(2.0f, 5.0f, -2.0f);
 }
 
 // ---------- framework : save to file ----------
@@ -294,12 +339,4 @@ void rtvsD3dApp::resetRender()
 {
   m_pTracer->resetRender(pTexture);
   m_antShouldRender = false;
-}
-
-// ---------- framework : reset render ----------
-void rtvsD3dApp::resetSettings()
-{
-  m_pTracer->m_cameraPosition = Raytracer::vector3( 0, 0, 0 );
-  m_pTracer->m_cameraTarget = Raytracer::vector3( 0, 0, -1.0f );
-  m_pTracer->m_cameraTarget.Normalize();
 }
