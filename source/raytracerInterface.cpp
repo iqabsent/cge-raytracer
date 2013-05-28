@@ -2,7 +2,6 @@
 #include "../header/common.h"
 #include "../header/raytracer.h"
 #include "../header/scene.h"
-#include "../header/surface.h"
 #include "../header/common.h"
 
 // ---------- constructor ----------

@@ -413,8 +413,8 @@ void Scene::InitScene()
 	
 	// floor
 	m_Primitive[0] = new PlanePrim( vector3( 0, 1, 0 ), 3.0f );
-	m_Primitive[0]->SetName( "plane" );
-	m_Primitive[0]->GetMaterial()->SetReflection( 0.3f );
+	m_Primitive[0]->SetName( "bottomplane" );
+	m_Primitive[0]->GetMaterial()->SetReflection( 0.1f );
 	m_Primitive[0]->GetMaterial()->SetRefraction( 0 );
 	m_Primitive[0]->GetMaterial()->SetDiffuse( 0.7f );
 	m_Primitive[0]->GetMaterial()->SetSpecular( 0.5f );
@@ -448,52 +448,56 @@ void Scene::InitScene()
 	m_Primitive[3]->GetMaterial()->SetDiffuse( 0.4f );
 	m_Primitive[3]->GetMaterial()->SetColor( Color( 0.8f, 0.8f, 1.0f ) );
 	m_Primitive[3]->GetMaterial()->SetUVScale( 0.8f, 0.8f );
-	
-	// back side
-	m_Primitive[4] = new PlanePrim( vector3( 0, 0, -1 ), 22.4f );
-	m_Primitive[4]->SetName( "backplane" );
-	m_Primitive[4]->GetMaterial()->SetReflection( 0.0f );
+
+	// box
+	m_Primitive[4] = new Box( aabb( vector3( -5.5f, -3, 2.5f ), vector3( 2, 2, 2 ) ) );
+	m_Primitive[4]->GetMaterial()->SetReflection( 0.05f );
 	m_Primitive[4]->GetMaterial()->SetRefraction( 0.0f );
 	m_Primitive[4]->GetMaterial()->SetDiffuse( 1.0f );
-	m_Primitive[4]->GetMaterial()->SetColor( Color( 0.6f, 0.5f, 0.5f ) );
-	m_Primitive[4]->GetMaterial()->SetUVScale( 0.1f, 0.1f );
+	m_Primitive[4]->GetMaterial()->SetColor( Color( 0.7f, 0.7f, 0.7f ) );
+	m_Primitive[4]->GetMaterial()->SetUVScale( 0.4f, 0.4f );
 	
-	// left side
-	m_Primitive[5] = new PlanePrim( vector3( 1, 0, 0 ), 10 );
+	// back side
+	m_Primitive[5] = new PlanePrim( vector3( 0, 0, -1 ), 22.4f );
 	m_Primitive[5]->SetName( "backplane" );
 	m_Primitive[5]->GetMaterial()->SetReflection( 0.0f );
 	m_Primitive[5]->GetMaterial()->SetRefraction( 0.0f );
 	m_Primitive[5]->GetMaterial()->SetDiffuse( 1.0f );
-	m_Primitive[5]->GetMaterial()->SetColor( Color( 0.5f, 0.5f, 0.6f ) );
+	m_Primitive[5]->GetMaterial()->SetColor( Color( 0.6f, 0.5f, 0.5f ) );
 	m_Primitive[5]->GetMaterial()->SetUVScale( 0.1f, 0.1f );
-	
-	// right side
-	m_Primitive[6] = new PlanePrim( vector3( -1, 0, 0 ), 10 );
-	m_Primitive[6]->SetName( "backplane" );
+	m_Primitive[5]->GetMaterial()->SetTexture( new Texture( "textures/wall2.tga" ) );
+
+	// left side
+	m_Primitive[6] = new PlanePrim( vector3( 1, 0, 0 ), 10 );
+	m_Primitive[6]->SetName( "leftplane" );
 	m_Primitive[6]->GetMaterial()->SetReflection( 0.0f );
 	m_Primitive[6]->GetMaterial()->SetRefraction( 0.0f );
 	m_Primitive[6]->GetMaterial()->SetDiffuse( 1.0f );
 	m_Primitive[6]->GetMaterial()->SetColor( Color( 0.5f, 0.5f, 0.6f ) );
 	m_Primitive[6]->GetMaterial()->SetUVScale( 0.1f, 0.1f );
+	m_Primitive[6]->GetMaterial()->SetTexture( new Texture( "textures/wall.tga" ) );
 	
-	// ceiling
-	m_Primitive[7] = new PlanePrim( vector3( 0, -1, 0 ), 7.4f );
-	m_Primitive[7]->SetName( "back plane" );
+	// right side
+	m_Primitive[7] = new PlanePrim( vector3( -1, 0, 0 ), 10 );
+	m_Primitive[7]->SetName( "rightplane" );
 	m_Primitive[7]->GetMaterial()->SetReflection( 0.0f );
 	m_Primitive[7]->GetMaterial()->SetRefraction( 0.0f );
-	m_Primitive[7]->GetMaterial()->SetSpecular( 1.0f );
 	m_Primitive[7]->GetMaterial()->SetDiffuse( 1.0f );
-	m_Primitive[7]->GetMaterial()->SetColor( Color( 0.4f, 0.7f, 0.7f ) );
+	m_Primitive[7]->GetMaterial()->SetColor( Color( 0.5f, 0.5f, 0.6f ) );
+	m_Primitive[7]->GetMaterial()->SetUVScale( 0.1f, 0.1f );
+	m_Primitive[7]->GetMaterial()->SetTexture( new Texture( "textures/wall.tga" ) );
 	
-	// box
-	m_Primitive[8] = new Box( aabb( vector3( -4.5f, -3, 2.5f ), vector3( 2, 2, 2 ) ) );
-	m_Primitive[8]->GetMaterial()->SetReflection( 0.1f );
+	// ceiling
+	m_Primitive[8] = new PlanePrim( vector3( 0, -1, 0 ), 7.4f );
+	m_Primitive[8]->SetName( "topplane" );
+	m_Primitive[8]->GetMaterial()->SetReflection( 0.0f );
 	m_Primitive[8]->GetMaterial()->SetRefraction( 0.0f );
+	m_Primitive[8]->GetMaterial()->SetSpecular( 1.0f );
 	m_Primitive[8]->GetMaterial()->SetDiffuse( 1.0f );
-	m_Primitive[8]->GetMaterial()->SetColor( Color( 0.7f, 0.7f, 0.7f ) );
-	m_Primitive[8]->GetMaterial()->SetUVScale( 0.4f, 0.4f );
+	m_Primitive[8]->GetMaterial()->SetColor( Color( 0.9f, 0.85f, 0.85f ) );
+	m_Primitive[8]->GetMaterial()->SetTexture( new Texture( "textures/wall2.tga" ) );
+	
 
-	m_Primitive[8]->GetMaterial()->SetUVScale( 0.4f, 0.4f );
 #if 0
 	// area light
 	m_Primitive[9] = new Box( aabb( vector3( -1, 5, 4 ), vector3( 2, 0.1f, 2 ) ) );
@@ -504,10 +508,10 @@ void Scene::InitScene()
 	m_Primitive[10]->GetMaterial()->SetColor( Color( 0.7f, 0.7f, 0.7f ) );
 #else
 	// light source 1
-	m_Primitive[9] = new Sphere( vector3( 4, 4, -4 ), 0.1f );
+	m_Primitive[9] = new Sphere( vector3( 4.0f, 3.0f, 0.0f ), 0.1f );
 	m_Primitive[9]->Light( true );
 	m_Primitive[9]->GetMaterial()->SetColor( Color( 0.6f, 0.6f, 0.7f ) );
-	m_Primitive[10] = new Sphere( vector3( 2, 5, -2 ), 0.1f );
+	m_Primitive[10] = new Sphere( vector3( 2.0f, 5.0f, 2.0f ), 0.1f );
 	m_Primitive[10]->Light( true );
 	m_Primitive[10]->GetMaterial()->SetColor( Color( 1.0f, 0.8f, 1.0f ) );
 #endif
