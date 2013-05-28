@@ -425,10 +425,12 @@ void Scene::InitScene()
 	// big sphere
 	m_Primitive[1] = new Sphere( vector3( 2, 0.8f, 3 ), 2.5f );
 	m_Primitive[1]->SetName( "big sphere" );
-	m_Primitive[1]->GetMaterial()->SetReflection( 0.4f );
-	m_Primitive[1]->GetMaterial()->SetRefraction( 0.8f );
+	m_Primitive[1]->GetMaterial()->SetReflection( 0.2f );
+	m_Primitive[1]->GetMaterial()->SetRefraction( 0.7f );
 	m_Primitive[1]->GetMaterial()->SetRefrIndex( 1.3f );
-	m_Primitive[1]->GetMaterial()->SetColor( Color( 0.7f, 0.7f, 1.0f ) );
+	m_Primitive[1]->GetMaterial()->SetDiffuse( 0.4f );
+	m_Primitive[1]->GetMaterial()->SetSpecular( 1.0f );
+	m_Primitive[1]->GetMaterial()->SetColor( Color( 0.0f, 0.0f, 0.0f ) );
 
 	// small sphere 
 	m_Primitive[2] = new Sphere( vector3( 3.0f, 0.5f, 10 ), 1 );
