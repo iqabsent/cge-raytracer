@@ -133,7 +133,7 @@ bool rtvsD3dApp::setup ()
 
   // create a raytracer
   m_pTracer = new RaytracerInterface(WIDTH, HEIGHT);
-  m_antShouldRender = false;
+  m_antShouldRender = true;
 
 	// ok
 	return true;
